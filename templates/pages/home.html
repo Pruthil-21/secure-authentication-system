@@ -1,0 +1,137 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+Secure Authentication System
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+
+            Secure Authentication System
+
+        </h1>
+
+        <p class="hero-description">
+
+            Modern authentication with robust security,
+            email verification, two-factor authentication,
+            and protection against common web security threats.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#"
+               class="primary-button">
+
+                Register
+
+            </a>
+
+            <a href="#"
+               class="secondary-button">
+
+                Login
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="features">
+
+    <h2>
+
+        Core Security Features
+
+    </h2>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+
+            <h3>
+
+                Password Security
+
+            </h3>
+
+            <p>
+
+                Passwords are securely hashed using bcrypt before storage.
+
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>
+
+                Email Verification
+
+            </h3>
+
+            <p>
+
+                Verify every account using secure email-based OTP.
+
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>
+
+                Two-Factor Authentication
+
+            </h3>
+
+            <p>
+
+                Add an extra layer of protection using email-based 2FA.
+
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>
+
+                Attack Protection
+
+            </h3>
+
+            <p>
+
+                Protection against SQL Injection, Cross-Site Request Forgery (CSRF), Cross-Site Scripting (XSS), and brute-force attacks.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="security-note">
+
+    <p>
+
+        Built using modern authentication and web security best practices.
+
+    </p>
+
+</section>
+
+{% endblock %}

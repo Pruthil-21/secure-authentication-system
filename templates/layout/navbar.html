@@ -1,0 +1,46 @@
+<nav class="navbar">
+
+    <div class="navbar-container">
+
+        <a href="{{ url_for('auth.home') }}"
+           class="navbar-brand">
+
+            <img src="{{ url_for('static', filename='images/logo.svg') }}"
+                 alt="Secure Authentication System Logo"
+                 class="navbar-logo">
+
+        </a>
+
+        <div class="navbar-actions">
+
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+
+            <a href="https://github.com/Pruthil-21/secure-authentication-system"
+               target="_blank"
+               class="github-button">
+
+                GitHub
+
+            </a>
+
+            <a href="#"
+               class="nav-button">
+
+                Login
+
+            </a>
+
+            <a href="#"
+               class="nav-button primary-button">
+
+                Register
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>

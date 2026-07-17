@@ -1,0 +1,225 @@
+/* ==========================================================
+   Secure Authentication System
+   Responsive Styles
+   ========================================================== */
+
+
+/* ==========================================
+   Large Tablets (≤ 1024px)
+========================================== */
+
+@media (max-width: 1024px) {
+
+    .navbar-container {
+
+        height: 72px;
+
+    }
+
+    .navbar-title {
+
+        font-size: 1rem;
+
+    }
+
+    section {
+
+        padding: 4rem 0;
+
+    }
+
+}
+
+
+/* ==========================================
+   Tablets (≤ 768px)
+========================================== */
+
+@media (max-width: 768px) {
+
+    .navbar-container {
+
+        flex-direction: column;
+
+        justify-content: center;
+
+        gap: 1rem;
+
+        height: auto;
+
+        padding: 1rem 0;
+
+    }
+
+    .navbar-actions {
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+    }
+
+    .hero {
+
+        padding-top: 4rem;
+
+        padding-bottom: 4rem;
+
+    }
+
+    .hero h1 {
+
+        font-size: 2.5rem;
+
+    }
+
+    .hero-description {
+
+        font-size: 1rem;
+
+    }
+
+    .hero-buttons {
+
+        flex-direction: column;
+
+        align-items: center;
+
+    }
+
+    .primary-button,
+    .secondary-button {
+
+        width: 220px;
+
+    }
+
+    .feature-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 1.5rem;
+
+    }
+
+}
+
+
+/* ==========================================
+   Mobile (≤ 576px)
+========================================== */
+
+@media (max-width: 576px) {
+
+    main {
+
+        width: 94%;
+
+    }
+
+    .navbar-brand {
+
+        flex-direction: column;
+
+        text-align: center;
+
+    }
+
+    .navbar-logo {
+
+        width: 52px;
+
+        height: 52px;
+
+    }
+
+    .navbar-title {
+
+        font-size: .95rem;
+
+    }
+
+    .navbar-actions {
+
+        width: 100%;
+
+        gap: .75rem;
+
+    }
+
+    .nav-button,
+    .github-button {
+
+        width: 100%;
+
+    }
+
+    .theme-toggle {
+
+        width: 100%;
+
+        border-radius: var(--border-radius);
+
+    }
+
+    .hero h1 {
+
+        font-size: 2rem;
+
+    }
+
+    .hero-description {
+
+        font-size: .95rem;
+
+    }
+
+    .feature-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .feature-card {
+
+        padding: 1.5rem;
+
+    }
+
+    .footer-links {
+
+        flex-direction: column;
+
+        gap: .5rem;
+
+    }
+
+    .footer-divider {
+
+        display: none;
+
+    }
+
+}
+
+
+/* ==========================================
+   Small Mobile (≤ 400px)
+========================================== */
+
+@media (max-width: 400px) {
+
+    .hero h1 {
+
+        font-size: 1.75rem;
+
+    }
+
+    .primary-button,
+    .secondary-button {
+
+        width: 100%;
+
+    }
+
+}
