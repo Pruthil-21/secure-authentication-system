@@ -7,6 +7,7 @@ from pathlib import Path
 from flask import Flask
 
 from config import Config
+
 from authentication.extensions import (
     bcrypt,
     csrf,
@@ -14,6 +15,7 @@ from authentication.extensions import (
     limiter,
     login_manager,
     mail,
+    migrate,
 )
 
 
@@ -32,32 +34,49 @@ def create_app():
         instance_path=str(BASE_DIR / "instance"),
     )
 
-    # Load configuration
     app.config.from_object(Config)
 
-    # Initialize Flask extensions
+    # ======================================================
+    # Initialize Extensions
+    # ======================================================
+
     db.init_app(app)
+
+    migrate.init_app(app, db)
+
     bcrypt.init_app(app)
+
     login_manager.init_app(app)
+
     mail.init_app(app)
+
     csrf.init_app(app)
+
     limiter.init_app(app)
 
-    # Flask-Login configuration
+    # ======================================================
+    # Login Manager
+    # ======================================================
+
     login_manager.login_view = "auth.login"
+
     login_manager.login_message_category = "warning"
+
+    # ======================================================
+    # Import Models
+    # ======================================================
+
+    from authentication.models import User
 
     @login_manager.user_loader
     def load_user(user_id):
-        """
-        Temporary user loader.
 
-        This will be replaced after implementing
-        the User model in the registration phase.
-        """
-        return None
+        return User.query.get(int(user_id))
 
+    # ======================================================
     # Register Blueprints
+    # ======================================================
+
     from authentication.routes import auth_bp
 
     app.register_blueprint(auth_bp)

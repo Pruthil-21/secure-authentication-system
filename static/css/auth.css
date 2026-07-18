@@ -1,0 +1,642 @@
+/* ==========================================================
+   Authentication Pages
+   ========================================================== */
+
+
+/* ------------------------------
+   Authentication Section
+------------------------------ */
+
+.auth-section {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: calc(100vh - 180px);
+
+    padding: 4rem 1rem;
+
+}
+
+
+/* ------------------------------
+   Authentication Container
+------------------------------ */
+
+.auth-container {
+
+    width: 100%;
+
+    max-width: 500px;
+
+}
+
+
+/* ------------------------------
+   Authentication Card
+------------------------------ */
+
+.auth-card {
+
+    background: var(--surface-color);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--border-radius);
+
+    box-shadow: var(--shadow-md);
+
+    padding: 2.5rem;
+
+    transition: var(--transition);
+
+}
+
+.auth-card:hover {
+
+    box-shadow: var(--shadow-lg);
+
+}
+
+
+/* ------------------------------
+   Header
+------------------------------ */
+
+.auth-header {
+
+    text-align: center;
+
+    margin-bottom: 2rem;
+
+}
+
+.auth-header h1 {
+
+    font-size: 2rem;
+
+    margin-bottom: .5rem;
+
+}
+
+.auth-header p {
+
+    color: var(--text-light);
+
+}
+
+
+/* ------------------------------
+   Form
+------------------------------ */
+
+.form-group {
+
+    margin-bottom: 1.5rem;
+
+}
+
+.form-label {
+
+    display: block;
+
+    margin-bottom: .5rem;
+
+    font-weight: 600;
+
+    color: var(--text-color);
+
+}
+
+.form-control {
+
+    width: 100%;
+
+    padding: .85rem 1rem;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--border-radius);
+
+    background: var(--surface-color);
+
+    color: var(--text-color);
+
+    font-size: 1rem;
+
+    transition: var(--transition);
+
+}
+
+.form-control:focus {
+
+    outline: none;
+
+    border-color: var(--primary-color);
+
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .15);
+
+}
+
+.form-control.valid {
+
+    border-color:#16A34A;
+
+    box-shadow:
+
+        0 0 0 3px
+
+        rgba(22,163,74,.15);
+
+}
+
+.form-control.invalid {
+
+    border-color:#DC2626;
+
+    box-shadow:
+
+        0 0 0 3px
+
+        rgba(220,38,38,.15);
+
+}
+
+
+/* ------------------------------
+   Validation Errors
+------------------------------ */
+
+.text-danger {
+
+    display: block;
+
+    margin-top: .4rem;
+
+    color: var(--danger-color);
+
+    font-size: .875rem;
+
+}
+
+
+/* ------------------------------
+   Password Strength
+------------------------------ */
+
+#password-strength {
+
+    margin-top: .75rem;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+}
+
+
+/* ------------------------------
+   Buttons
+------------------------------ */
+
+.auth-actions {
+
+    margin-top: 2rem;
+
+}
+
+.w-100 {
+
+    width: 100%;
+
+}
+
+
+/* ------------------------------
+   Footer
+------------------------------ */
+
+.auth-footer {
+
+    margin-top: 2rem;
+
+    text-align: center;
+
+    color: var(--text-light);
+
+}
+
+.auth-footer a {
+
+    color: var(--primary-color);
+
+    font-weight: 600;
+
+}
+
+.auth-footer a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* ------------------------------
+   Responsive
+------------------------------ */
+
+@media (max-width: 576px) {
+
+    .auth-card {
+
+        padding: 2rem 1.5rem;
+
+    }
+
+    .auth-header h1 {
+
+        font-size: 1.75rem;
+
+    }
+
+}
+
+/* ==========================================================
+   Password Field
+========================================================== */
+
+.password-wrapper {
+
+    position: relative;
+
+}
+
+/* ==========================================================
+   Password Strength
+========================================================== */
+
+.password-strength-container{
+
+    margin-top:.9rem;
+
+}
+
+.strength-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:.5rem;
+
+    font-size:.9rem;
+
+    font-weight:600;
+
+}
+
+.strength-bar{
+
+    width:100%;
+
+    height:8px;
+
+    background:var(--border-color);
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+}
+
+.strength-fill{
+
+    width:0;
+
+    height:100%;
+
+    background:#EF4444;
+
+    border-radius:999px;
+
+    transition:
+
+        width .35s ease,
+
+        background-color .35s ease;
+
+}
+
+.strength-footer{
+
+    margin-top:.5rem;
+
+    font-size:.85rem;
+
+    color:var(--text-light);
+
+}
+
+/* ==========================================================
+   Validation Messages
+========================================================== */
+
+.validation-message{
+
+    display:block;
+
+    margin-top:.45rem;
+
+    font-size:.85rem;
+
+    min-height:18px;
+
+}
+
+/* ==========================================================
+   Password Requirements
+========================================================== */
+
+.password-requirements{
+
+    margin-top:1rem;
+
+    padding:1rem;
+
+    border:1px solid var(--border-color);
+
+    border-radius:var(--border-radius);
+
+    background:rgba(37,99,235,.03);
+
+}
+
+.password-requirements h4{
+
+    margin-bottom:.75rem;
+
+    font-size:.95rem;
+
+}
+
+.password-requirements ul{
+
+    list-style:none;
+
+    padding:0;
+
+    margin:0;
+
+}
+
+.password-requirements li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.65rem;
+
+    padding:.35rem 0;
+
+    transition:.25s ease;
+
+    color:var(--text-light);
+
+}
+
+.password-requirements li i{
+
+    width:18px;
+
+}
+
+/* ==========================================================
+   Terms
+========================================================== */
+
+.terms-group{
+
+    margin-top:1rem;
+
+}
+
+.terms-label{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:.65rem;
+
+    cursor:pointer;
+
+    font-size:.95rem;
+
+    line-height:1.5;
+
+}
+
+.terms-label input{
+
+    margin-top:4px;
+
+}
+
+.terms-label a{
+
+    color:var(--primary-color);
+
+    font-weight:600;
+
+}
+
+/* ==========================================================
+   Register Button
+========================================================== */
+
+#register-button{
+
+    transition:
+
+        background .25s,
+
+        transform .25s,
+
+        opacity .25s,
+
+        box-shadow .25s;
+
+}
+
+#register-button:disabled{
+
+    opacity:.65;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+.password-wrapper .form-control {
+
+    padding-right: 3.5rem;
+
+}
+
+.password-toggle {
+
+    position: absolute;
+
+    top: 50%;
+
+    right: 1rem;
+
+    transform: translateY(-50%);
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--text-light);
+
+    cursor: pointer;
+
+    font-size: 1rem;
+
+    transition: var(--transition);
+
+    padding: 0;
+
+}
+
+.password-toggle:hover {
+
+    color: var(--primary-color);
+
+}
+
+.password-toggle:focus {
+
+    outline: none;
+
+}
+
+.strength-fill{
+
+    transition:
+
+        width .35s ease,
+
+        background-color .35s ease;
+
+}
+
+/* ==========================================================
+   Password Warnings
+========================================================== */
+
+.password-warnings{
+
+    margin-top:1rem;
+
+}
+
+.password-warning{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.65rem;
+
+    color:#F59E0B;
+
+    margin:.45rem 0;
+
+    font-size:.92rem;
+
+}
+
+.password-warning i{
+
+    color:#F59E0B;
+
+}
+
+/* ==========================================================
+   Prevent Browser Autofill Background
+========================================================== */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+
+    -webkit-box-shadow: 0 0 0 1000px var(--surface-color) inset !important;
+
+    -webkit-text-fill-color: var(--text-color) !important;
+
+    caret-color: var(--text-color);
+
+    transition: background-color 9999s ease-in-out 0s;
+
+}
+
+/* ==========================================================
+   Login Shortcut
+========================================================== */
+
+.login-shortcut {
+
+    display: none;
+
+    margin-top: .35rem;
+
+    font-size: .9rem;
+
+    color: var(--text-light);
+
+}
+
+.login-shortcut a {
+
+    color: var(--primary-color);
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+}
+
+.login-shortcut a:hover {
+
+    text-decoration: underline;
+
+}
+
+.validation-link {
+
+    margin-left: .35rem;
+
+    color: var(--primary-color);
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: var(--transition);
+
+}
+
+.validation-link:hover {
+
+    text-decoration: underline;
+
+}

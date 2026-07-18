@@ -1,0 +1,392 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="auth-header">
+
+                <h1>Create Your Account</h1>
+
+                <p>
+
+                    Join Secure Authentication System and protect your
+                    account with modern authentication and security
+                    features.
+
+                </p>
+
+            </div>
+
+            <form method="POST" id="registration-form" novalidate>
+
+                {{ form.hidden_tag() }}
+
+                <!-- ======================================================
+                     Full Name
+                ======================================================= -->
+
+                <div class="form-group">
+
+                    {{ form.full_name.label(class="form-label") }}
+
+                    {{ form.full_name(
+                    class="form-control",
+                    id="full_name",
+                    placeholder="John Doe",
+                    autocomplete="name"
+                    ) }}
+
+                    <small id="fullname-validation" class="validation-message">
+                    </small>
+
+                    {% for error in form.full_name.errors %}
+
+                    <small class="text-danger">
+
+                        {{ error }}
+
+                    </small>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- ======================================================
+                     Username
+                ======================================================= -->
+
+                <div class="form-group">
+
+                    {{ form.username.label(class="form-label") }}
+
+                    {{ form.username(
+                    class="form-control",
+                    id="username",
+                    placeholder="john_doe",
+                    autocomplete="username"
+                    ) }}
+
+                    <small id="username-validation" class="validation-message">
+                    </small>
+
+                    {% for error in form.username.errors %}
+
+                    <small class="text-danger">
+
+                        {{ error }}
+
+                    </small>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- ======================================================
+                     Email
+                ======================================================= -->
+
+                <div class="form-group">
+
+                    {{ form.email.label(class="form-label") }}
+
+                    {{ form.email(
+                    class="form-control",
+                    id="email",
+                    placeholder="john@example.com",
+                    autocomplete="email"
+                    ) }}
+
+                    <small id="email-validation" class="validation-message">
+                    </small>
+
+                    {% for error in form.email.errors %}
+
+                    <small class="text-danger">
+
+                        {{ error }}
+
+                    </small>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- ======================================================
+                     Password
+                ======================================================= -->
+
+                <div class="form-group">
+
+                    {{ form.password.label(class="form-label") }}
+
+                    <div class="password-wrapper">
+
+                        {{ form.password(
+
+                        class="form-control",
+
+                        id="password",
+
+                        placeholder="Create a strong password",
+
+                        autocomplete="new-password"
+
+                        ) }}
+
+                        <button type="button" class="password-toggle" data-target="password"
+                            aria-label="Toggle Password">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                    <!-- Password Strength -->
+
+                    <div class="password-strength-container">
+
+                        <div class="strength-header">
+
+                            <span>
+
+                                Password Strength
+
+                            </span>
+
+                            <span id="password-strength">
+
+                                Weak
+
+                            </span>
+
+                        </div>
+
+                        <div class="strength-bar">
+
+                            <div id="password-progress-fill" class="strength-fill">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="strength-footer">
+
+                        <span id="password-progress-text">
+
+                            0 / 5 Requirements Completed
+
+                        </span>
+
+                    </div>
+                    <!-- ======================================================
+                         Password Requirements
+                    ======================================================= -->
+
+                    <div class="password-requirements">
+
+                        <h4>Password Requirements</h4>
+
+                        <ul id="password-checklist">
+
+                            <li id="check-length">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                At least 12 characters
+
+                            </li>
+
+                            <li id="check-uppercase">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                Contains an uppercase letter
+
+                            </li>
+
+                            <li id="check-lowercase">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                Contains a lowercase letter
+
+                            </li>
+
+                            <li id="check-number">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                Contains a number
+
+                            </li>
+
+                            <li id="check-special">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                Contains a special character
+
+                            </li>
+
+                            <div id="password-warnings" class="password-warnings">
+
+                            </div>
+
+                        </ul>
+
+                    </div>
+
+                    {% for error in form.password.errors %}
+
+                    <small class="text-danger">
+
+                        {{ error }}
+
+                    </small>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- ======================================================
+                     Confirm Password
+                ======================================================= -->
+
+                <div class="form-group">
+
+                    {{ form.confirm_password.label(class="form-label") }}
+
+                    <div class="password-wrapper">
+
+                        {{ form.confirm_password(
+
+                        class="form-control",
+
+                        id="confirm_password",
+
+                        placeholder="Confirm Password",
+
+                        autocomplete="new-password"
+
+                        ) }}
+
+                        <button type="button" class="password-toggle" data-target="confirm_password"
+                            aria-label="Toggle Password">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                    <small id="confirm-password-status" class="validation-message">
+
+                    </small>
+
+                    {% for error in form.confirm_password.errors %}
+
+                    <small class="text-danger">
+
+                        {{ error }}
+
+                    </small>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- ======================================================
+                     Terms
+                ======================================================= -->
+
+                <div class="form-group terms-group">
+
+                    <label class="terms-label">
+
+                        <input type="checkbox" id="accept-terms">
+
+                        <span>
+
+                            I agree to the
+
+                            <a href="#">
+
+                                Terms of Service
+
+                            </a>
+
+                            and
+
+                            <a href="#">
+
+                                Privacy Policy
+
+                            </a>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+                <!-- ======================================================
+                     Submit
+                ======================================================= -->
+
+                <div class="auth-actions">
+
+                    {{ form.submit(
+
+                    class="btn btn-primary w-100",
+
+                    id="register-button",
+
+                    ) }}
+
+                </div>
+                <!-- ======================================================
+                     Footer
+                ======================================================= -->
+
+            </form>
+
+            <div class="auth-footer">
+
+                <p>
+
+                    Already have an account?
+
+                    <a href="{{ url_for('auth.login') }}">
+
+                        Sign in instead
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+
+{{ super() }}
+
+{% endblock %}
