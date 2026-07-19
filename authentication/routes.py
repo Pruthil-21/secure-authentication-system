@@ -12,7 +12,13 @@ from flask import (
     url_for,
 )
 
-from flask_login import login_user
+from flask_login import (
+    login_required,
+    login_user,
+    logout_user,
+    current_user,
+)
+
 from authentication.forms import (
     LoginForm,
     RegistrationForm,
@@ -152,7 +158,10 @@ def login():
 
     if form.validate_on_submit():
 
-        success, message, user = AuthService.login_user(form)
+        success, message, user = AuthService.login_user(
+            form,
+            request.remote_addr,
+        )
 
         if success:
 
@@ -195,6 +204,30 @@ def login():
     )
 
 # ==========================================================
+# Logout
+# ==========================================================
+
+@auth_bp.route("/logout")
+@login_required
+def logout():
+
+    logout_user()
+
+    flash(
+
+        "You have been logged out successfully.",
+
+        "success",
+
+    )
+
+    return redirect(
+
+        url_for("auth.login")
+
+    )
+
+# ==========================================================
 # Dashboard
 # ==========================================================
 
@@ -232,6 +265,7 @@ def reset_password():
 # ==========================================================
 
 @auth_bp.route("/security-center")
+@login_required
 def security_center():
 
     return render_template("pages/security_center.html")
@@ -262,6 +296,7 @@ def verify_login_otp():
 # ==========================================================
 
 @auth_bp.route("/profile")
+@login_required
 def profile():
 
     return render_template("pages/profile.html")

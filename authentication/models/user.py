@@ -57,6 +57,37 @@ class User(UserMixin, db.Model):
         nullable=False,
     )
 
+    # ==========================================================
+    # Security Fields
+    # ==========================================================
+
+    last_login = db.Column(
+        db.DateTime,
+        nullable=True,
+    )
+
+    last_login_ip = db.Column(
+        db.String(45),
+        nullable=True,
+    )
+
+    login_count = db.Column(
+        db.Integer,
+        default=0,
+        nullable=False,
+    )
+
+    failed_login_attempts = db.Column(
+        db.Integer,
+        default=0,
+        nullable=False,
+    )
+
+    account_locked_until = db.Column(
+        db.DateTime,
+        nullable=True,
+    )
+
     created_at = db.Column(
         db.DateTime,
         default=datetime.utcnow,
@@ -67,6 +98,12 @@ class User(UserMixin, db.Model):
         db.DateTime,
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
+        nullable=False,
+    )
+
+    last_password_change = db.Column(
+        db.DateTime,
+        default=datetime.utcnow,
         nullable=False,
     )
 
