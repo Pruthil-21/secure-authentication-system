@@ -11,7 +11,6 @@ from pathlib import Path
 # Load environment variables from .env
 load_dotenv()
 
-
 class Config:
     """
     Base configuration class.
@@ -32,6 +31,7 @@ class Config:
 
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
 
     # Security
     REMEMBER_COOKIE_HTTPONLY = True
@@ -41,6 +41,11 @@ class Config:
 
     REMEMBER_COOKIE_DURATION = timedelta(days=30)
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=20)
+
+    # Token Expiration (seconds)
+
+    EMAIL_VERIFICATION_TOKEN_EXPIRES = 1800
+    PASSWORD_RESET_TOKEN_EXPIRES = 1800
 
     # Upload / Session
     MAX_CONTENT_LENGTH = 2 * 1024 * 1024

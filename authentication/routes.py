@@ -24,6 +24,14 @@ from authentication.forms import (
     RegistrationForm,
 )
 
+from authentication.forms.forgot_password_form import (
+    ForgotPasswordForm,
+)
+
+from authentication.forms.reset_password_form import (
+    ResetPasswordForm,
+)
+
 from authentication.forms.profile_forms import (
     UpdateProfileForm,
 )
@@ -35,6 +43,7 @@ from authentication.models import (
 
 from authentication.services import (
     AuthService,
+    TokenService,
 )
 
 from authentication.services.dashboard_service import (
@@ -44,6 +53,8 @@ from authentication.services.dashboard_service import (
 from authentication.services.profile_service import (
     ProfileService,
 )
+
+from authentication.extensions import db
 
 auth_bp = Blueprint(
     "auth",
@@ -318,24 +329,111 @@ def logout():
 # ==========================================================
 # Forgot Password
 # ==========================================================
-
-@auth_bp.route("/forgot-password")
+'''
+@auth_bp.route(
+    "/forgot-password",
+    methods=["GET", "POST"],
+)
 def forgot_password():
+    """
+    Request a password reset email.
+    """
+
+    form = ForgotPasswordForm()
+
+    if form.validate_on_submit():
+
+        success, message = AuthService.forgot_password(
+            form.email.data,
+        )
+
+        flash(
+            message,
+            "info" if success else "danger",
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
 
     return render_template(
         "pages/forgot_password.html",
+        form=form,
     )
+'''
+@auth_bp.route(
+    "/forgot-password",
+    methods=["GET", "POST"],
+)
+def forgot_password():
 
+    form = ForgotPasswordForm()
+
+    if form.validate_on_submit():
+
+        print("Before AuthService")
+
+        success, message = AuthService.forgot_password(
+            form.email.data,
+        )
+
+        print("After AuthService")
+
+        flash(
+            message,
+            "info" if success else "danger",
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    return render_template(
+        "pages/forgot_password.html",
+        form=form,
+    )
 
 # ==========================================================
 # Reset Password
 # ==========================================================
 
-@auth_bp.route("/reset-password")
-def reset_password():
+@auth_bp.route(
+    "/reset-password/<token>",
+    methods=["GET", "POST"],
+)
+def reset_password(token):
+    """
+    Reset a user's password.
+    """
+
+    form = ResetPasswordForm()
+
+    if form.validate_on_submit():
+
+        success, message = AuthService.reset_password(
+            token,
+            form,
+        )
+
+        if success:
+
+            flash(
+                message,
+                "success",
+            )
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+        flash(
+            message,
+            "danger",
+        )
 
     return render_template(
         "pages/reset_password.html",
+        form=form,
     )
 
 
@@ -356,11 +454,55 @@ def security_center():
 # Verify Email
 # ==========================================================
 
-@auth_bp.route("/verify-email")
-def verify_email():
+@auth_bp.route("/verify-email/<token>")
+def verify_email(token):
+    """
+    Verify a user's email address.
+    """
 
-    return render_template(
-        "pages/verify_email.html",
+    email = TokenService.verify_email_token(
+        token,
+    )
+
+    if email is None:
+
+        flash(
+            "Verification link is invalid or has expired.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    user = User.query.filter_by(
+        email=email,
+    ).first()
+
+    if user is None:
+
+        flash(
+            "Account not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    if not user.is_email_verified:
+
+        user.is_email_verified = True
+
+        db.session.commit()
+
+    flash(
+        "Your email has been verified successfully.",
+        "success",
+    )
+
+    return redirect(
+        url_for("auth.login")
     )
 
 
@@ -373,4 +515,16 @@ def verify_login_otp():
 
     return render_template(
         "pages/verify_login_otp.html",
+    )
+    
+# ==========================================================
+# Login History
+# ==========================================================
+
+@auth_bp.route("/login-history")
+@login_required
+def login_history():
+
+    return render_template(
+        "pages/login_history.html",
     )

@@ -1531,3 +1531,19 @@ button {
     }
 
 }
+
+.quick-action-icon.security{
+
+    background:rgba(37,99,235,.15);
+
+    color:#3b82f6;
+
+}
+
+.quick-action-icon.history{
+
+    background:rgba(34,197,94,.15);
+
+    color:#22c55e;
+
+}

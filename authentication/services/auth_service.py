@@ -6,6 +6,10 @@ from datetime import (
     datetime,
     timedelta,
 )
+from flask import (
+    current_app,
+    url_for,
+)
 
 from authentication.extensions import (
     bcrypt,
@@ -17,6 +21,13 @@ from authentication.validators.password_validator import (
 )
 from authentication.services.login_history_service import (
     LoginHistoryService,
+)
+from authentication.services.email_service import (
+    EmailService,
+)
+
+from authentication.services.token_service import (
+    TokenService,
 )
 
 
@@ -221,4 +232,109 @@ class AuthService:
             True,
             "Login successful.",
             user,
+        )
+
+
+    # ==========================================================
+    # Forgot Password
+    # ==========================================================
+
+    @staticmethod
+    def request_password_reset(user):
+        """
+        Send a password reset email.
+        """
+
+        token = TokenService.generate_reset_token(
+            user.email,
+        )
+
+        reset_url = url_for(
+            "auth.reset_password",
+            token=token,
+            _external=True,
+        )
+
+        EmailService.send_password_reset_email(
+            user,
+            reset_url,
+        )
+
+    @staticmethod
+    def forgot_password(email):
+        """
+        Handle forgot password request.
+
+        Always returns success to prevent
+        email enumeration.
+        """
+
+        user = User.query.filter_by(
+            email=email.lower().strip(),
+        ).first()
+
+        if user:
+            AuthService.request_password_reset(user)
+
+        return (
+            True,
+            (
+                "If an account exists with that "
+                "email address, a password reset "
+                "link has been sent."
+            ),
+        )
+
+    # ==========================================================
+    # Reset Password
+    # ==========================================================
+
+    @staticmethod
+    def reset_password(
+        token,
+        form,
+    ):
+        """
+        Reset a user's password.
+        """
+
+        email = TokenService.verify_reset_token(token)
+
+        if email is None:
+            return (
+                False,
+                "This password reset link is invalid or has expired.",
+            )
+
+        user = User.query.filter_by(
+            email=email,
+        ).first()
+
+        if user is None:
+            return (
+                False,
+                "Invalid password reset request.",
+            )
+
+        password_result = validate_password(
+            form.password.data,
+        )
+
+        if not password_result.valid:
+            return (
+                False,
+                password_result.errors[0],
+            )
+
+        user.password_hash = bcrypt.generate_password_hash(
+            form.password.data,
+        ).decode("utf-8")
+
+        user.last_password_change = datetime.utcnow()
+
+        db.session.commit()
+
+        return (
+            True,
+            "Your password has been reset successfully.",
         )
