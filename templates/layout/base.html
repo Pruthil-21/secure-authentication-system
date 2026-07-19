@@ -3,124 +3,141 @@
 
 <head>
 
-      <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-      <title>
-            {% block title %}
-            Secure Authentication System
-            {% endblock %}
-      </title>
+    <title>
+        {% block title %}
+        Secure Authentication System
+        {% endblock %}
+    </title>
 
-      <meta name="description" content="Secure Authentication System built using Flask">
+    <meta name="description"
+          content="Secure Authentication System built using Flask">
 
-      <!-- Favicon -->
-      <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!-- Favicon -->
+    <link rel="icon"
+          type="image/x-icon"
+          href="{{ url_for('static', filename='images/favicon.ico') }}">
 
-      <!-- Google Fonts -->
-      <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Google Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
 
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
 
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
-      <!-- Font Awesome -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-      <!-- Global Styles -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <!-- ======================================================
+         Global Styles
+    ======================================================= -->
 
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/main.css') }}">
 
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/components.css') }}">
 
-      <!-- Authentication Pages -->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/responsive.css') }}">
 
-      {% block styles %}
-      {% endblock %}
+    <!-- ======================================================
+         Page Specific Styles
+    ======================================================= -->
+
+    {% block page_css %}
+    {% endblock %}
 
 </head>
 
 <body>
 
-      {% include "layout/navbar.html" %}
+    {% include "layout/navbar.html" %}
 
-      <main>
+    <main>
 
-            <!-- Flash Messages -->
+        <!-- Flash Messages -->
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
 
             {% if messages %}
 
-            <div class="flash-container">
+                <div class="flash-container">
 
-                  {% for category, message in messages %}
+                    {% for category, message in messages %}
 
-                  <div class="flash-message flash-{{ category }}">
+                        <div class="flash-message flash-{{ category }}">
 
-                        <div class="flash-content">
+                            <div class="flash-content">
 
-                              {% if category == "success" %}
+                                {% if category == "success" %}
 
-                              <i class="fa-solid fa-circle-check"></i>
+                                    <i class="fa-solid fa-circle-check"></i>
 
-                              {% elif category == "danger" %}
+                                {% elif category == "danger" %}
 
-                              <i class="fa-solid fa-circle-xmark"></i>
+                                    <i class="fa-solid fa-circle-xmark"></i>
 
-                              {% elif category == "warning" %}
+                                {% elif category == "warning" %}
 
-                              <i class="fa-solid fa-triangle-exclamation"></i>
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
 
-                              {% else %}
+                                {% else %}
 
-                              <i class="fa-solid fa-circle-info"></i>
+                                    <i class="fa-solid fa-circle-info"></i>
 
-                              {% endif %}
+                                {% endif %}
 
-                              <span>{{ message }}</span>
+                                <span>{{ message }}</span>
+
+                            </div>
+
+                            <button type="button"
+                                    class="flash-close"
+                                    aria-label="Close">
+
+                                <i class="fa-solid fa-xmark"></i>
+
+                            </button>
 
                         </div>
 
-                        <button type="button" class="flash-close" aria-label="Close">
+                    {% endfor %}
 
-                              <i class="fa-solid fa-xmark"></i>
-
-                        </button>
-
-                  </div>
-
-                  {% endfor %}
-
-            </div>
+                </div>
 
             {% endif %}
 
-            {% endwith %}
+        {% endwith %}
 
-            {% block content %}
-            {% endblock %}
+        {% block content %}
+        {% endblock %}
 
-      </main>
+    </main>
 
-      {% include "layout/footer.html" %}
+    {% include "layout/footer.html" %}
 
-      <!-- JavaScript -->
+    <!-- ======================================================
+         Global JavaScript
+    ======================================================= -->
 
-      <script src="{{ url_for('static', filename='js/validation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-      <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <!-- ======================================================
+         Page Specific JavaScript
+    ======================================================= -->
 
-      <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
-
-      <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-
-      {% block scripts %}
-      {% endblock %}
+    {% block page_js %}
+    {% endblock %}
 
 </body>
 

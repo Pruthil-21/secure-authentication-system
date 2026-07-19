@@ -15,6 +15,9 @@ from authentication.models import User
 from authentication.validators.password_validator import (
     validate_password,
 )
+from authentication.services.login_history_service import (
+    LoginHistoryService,
+)
 
 
 class AuthService:
@@ -96,19 +99,18 @@ class AuthService:
     @staticmethod
     def login_user(
         form,
-        ip_address,
+        request,
     ):
         """
         Authenticate user.
         """
 
-        identifier = (
-            form.email_or_username.data.strip()
-        )
-
+        identifier = form.email_or_username.data.strip()
         password = form.password.data
 
-        # Find user by username or email
+        ip_address = request.remote_addr
+
+        # Find user
         user = User.query.filter(
             (User.email == identifier.lower())
             | (User.username == identifier)
@@ -131,13 +133,16 @@ class AuthService:
             and user.account_locked_until > datetime.utcnow()
         ):
 
-            remaining = int(
-                (
-                    user.account_locked_until
-                    - datetime.utcnow()
-                ).total_seconds()
-                / 60
-            ) + 1
+            remaining = (
+                int(
+                    (
+                        user.account_locked_until
+                        - datetime.utcnow()
+                    ).total_seconds()
+                    / 60
+                )
+                + 1
+            )
 
             return (
                 False,
@@ -153,6 +158,12 @@ class AuthService:
             user.password_hash,
             password,
         ):
+
+            LoginHistoryService.record_login(
+                user,
+                request,
+                successful=False,
+            )
 
             user.failed_login_attempts += 1
 
@@ -197,6 +208,12 @@ class AuthService:
         user.last_login = datetime.utcnow()
 
         user.last_login_ip = ip_address
+
+        LoginHistoryService.record_login(
+            user,
+            request,
+            successful=True,
+        )
 
         db.session.commit()
 

@@ -1,5 +1,12 @@
 {% extends "layout/base.html" %}
 
+{% block page_css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/auth.css') }}">
+
+{% endblock %}
+
 {% block title %}Create Account{% endblock %}
 
 {% block content %}
@@ -385,8 +392,10 @@
 
 {% endblock %}
 
-{% block scripts %}
+{% block page_js %}
 
-{{ super() }}
+<script src="{{ url_for('static', filename='js/validation.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 
 {% endblock %}

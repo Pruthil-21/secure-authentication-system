@@ -1,0 +1,566 @@
+{% extends "layout/base.html" %}
+
+{% block page_css %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+{% endblock %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<section class="dashboard">
+
+    <div class="dashboard-container">
+
+        <!-- ======================================================
+             Hero Section
+        ======================================================= -->
+
+        <section class="hero-card">
+
+            <div class="hero-content">
+
+                <div class="hero-text">
+
+                    <span class="hero-badge">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        Secure Authentication System
+
+                    </span>
+
+                    <h1>
+
+                        Welcome back,
+                        {{ current_user.full_name }}
+
+                        <span class="wave">👋</span>
+
+                    </h1>
+
+                    <p>
+
+                        Monitor your account security, review recent login
+                        activity and keep your account protected.
+
+                    </p>
+
+                </div>
+
+                <div class="security-score-card">
+
+                    <div class="score-header">
+
+                        <i class="fa-solid fa-shield-check"></i>
+
+                        <span>Security Score</span>
+
+                    </div>
+
+                    <div class="score-circle">
+
+                        <span>
+
+                            {{ security_score }}%
+
+                        </span>
+
+                    </div>
+
+                    <div class="score-progress">
+
+                        <div id="security-progress" class="score-progress-fill" data-score="{{ security_score }}">
+                        </div>
+
+                    </div>
+
+                    {% if security_score >= 80 %}
+
+                    <span class="score-status excellent">
+
+                        Excellent
+
+                    </span>
+
+                    {% elif security_score >= 60 %}
+
+                    <span class="score-status good">
+
+                        Good
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="score-status improve">
+
+                        Needs Improvement
+
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ======================================================
+             Statistics
+        ======================================================= -->
+
+        <section class="stats-grid">
+
+            <article class="stat-card">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                </div>
+
+                <div class="stat-content">
+
+                    <span class="stat-title">
+
+                        Last Login
+
+                    </span>
+
+                    <h2>
+
+                        {% if statistics.last_login %}
+
+                        {{ statistics.last_login.strftime("%d %b %Y") }}
+
+                        {% else %}
+
+                        Never
+
+                        {% endif %}
+
+                    </h2>
+
+                </div>
+
+            </article>
+
+            <article class="stat-card">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                </div>
+
+                <div class="stat-content">
+
+                    <span class="stat-title">
+
+                        Login Count
+
+                    </span>
+
+                    <h2>
+
+                        {{ statistics.login_count }}
+
+                    </h2>
+
+                </div>
+
+            </article>
+
+            <article class="stat-card">
+
+                <div class="stat-icon danger">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+                <div class="stat-content">
+
+                    <span class="stat-title">
+
+                        Failed Attempts
+
+                    </span>
+
+                    <h2>
+
+                        {{ statistics.failed_attempts }}
+
+                    </h2>
+
+                </div>
+
+            </article>
+
+            <article class="stat-card">
+
+                <div class="stat-icon success">
+
+                    <i class="fa-solid fa-network-wired"></i>
+
+                </div>
+
+                <div class="stat-content">
+
+                    <span class="stat-title">
+
+                        Last Login IP
+
+                    </span>
+
+                    <div class="ip-address">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <span>
+
+                            {{ statistics.last_login_ip or "Unknown" }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <!-- ======================================================
+             Main Dashboard Grid
+        ======================================================= -->
+
+        <section class="dashboard-grid">
+            <!-- ======================================================
+             Account Security
+        ======================================================= -->
+
+            <article class="dashboard-card">
+
+                <div class="card-header">
+
+                    <h2>
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        Account Security
+
+                    </h2>
+
+                </div>
+
+                <div class="security-list">
+
+                    <div class="security-item">
+
+                        <div>
+
+                            <span class="security-label">
+
+                                Account Status
+
+                            </span>
+
+                        </div>
+
+                        {% if statistics.account_locked %}
+
+                        <span class="status-badge danger">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            Locked
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="status-badge success">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            Active
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="security-item">
+
+                        <div>
+
+                            <span class="security-label">
+
+                                Email Verification
+
+                            </span>
+
+                        </div>
+
+                        {% if statistics.email_verified %}
+
+                        <span class="status-badge success">
+
+                            <i class="fa-solid fa-envelope-circle-check"></i>
+
+                            Verified
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="status-badge warning">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            Pending
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="security-item">
+
+                        <div>
+
+                            <span class="security-label">
+
+                                Two-Factor Authentication
+
+                            </span>
+
+                        </div>
+
+                        {% if statistics.two_factor_enabled %}
+
+                        <span class="status-badge success">
+
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+
+                            Enabled
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="status-badge danger">
+
+                            <i class="fa-solid fa-mobile-screen"></i>
+
+                            Disabled
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="security-item">
+
+                        <div>
+
+                            <span class="security-label">
+
+                                Failed Login Attempts
+
+                            </span>
+
+                        </div>
+
+                        {% if statistics.failed_attempts == 0 %}
+
+                        <span class="status-badge success">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            None
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="status-badge warning">
+
+                            {{ statistics.failed_attempts }}
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            <!-- ======================================================
+             Recent Login Activity
+        ======================================================= -->
+
+            <article class="dashboard-card">
+
+                <div class="card-header">
+
+                    <h2>
+
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+
+                        Recent Login Activity
+
+                    </h2>
+
+                </div>
+
+                {% if recent_logins %}
+
+                <div class="activity-list">
+
+                    {% for login in recent_logins %}
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon">
+
+                            {% if login.successful %}
+
+                            <i class="fa-solid fa-circle-check success"></i>
+
+                            {% else %}
+
+                            <i class="fa-solid fa-circle-xmark danger"></i>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="activity-content">
+
+                            <strong>
+
+                                {% if login.successful %}
+
+                                Successful Login
+
+                                {% else %}
+
+                                Failed Login
+
+                                {% endif %}
+
+                            </strong>
+
+                            <small>
+
+                                {{ login.browser }}
+
+                                •
+                                {{ login.operating_system }}
+
+                            </small>
+
+                            <small>
+
+                                {{ login.ip_address }}
+
+                            </small>
+
+                        </div>
+
+                        <div class="activity-date">
+
+                            {{ login.login_time.strftime("%d %b %Y") }}
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    <p>
+
+                        No login activity available.
+
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </article>
+
+        </section>
+
+        <!-- ======================================================
+             Quick Actions
+        ======================================================= -->
+
+        <section class="quick-actions">
+
+            <div class="card-header">
+
+                <h2>
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                    Quick Actions
+
+                </h2>
+
+            </div>
+
+            <div class="action-grid">
+
+                <a href="{{ url_for('auth.profile') }}" class="action-card">
+
+                    <a href="{{ url_for('auth.security_center') }}" class="action-card">
+
+                        <a href="{{ url_for('auth.logout') }}" class="action-card logout">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            <span>
+
+                                Logout
+
+                            </span>
+
+                        </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block page_js %}
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,1533 @@
+/*
+==========================================================
+Secure Authentication System
+Dashboard Styles
+==========================================================
+*/
+
+/* ==========================================================
+   Theme Variables
+========================================================== */
+
+:root {
+
+    --dashboard-bg: #f8fafc;
+
+    --card-bg: #ffffff;
+
+    --card-hover: #f1f5f9;
+
+    --border-color: #e2e8f0;
+
+    --primary: #2563eb;
+
+    --primary-light: #dbeafe;
+
+    --success: #16a34a;
+
+    --warning: #f59e0b;
+
+    --danger: #dc2626;
+
+    --heading: #0f172a;
+
+    --text: #334155;
+
+    --muted: #64748b;
+
+    --shadow:
+        0 10px 30px rgba(15, 23, 42, .08);
+
+}
+
+
+/* ==========================================================
+   Dark Theme
+========================================================== */
+
+body.dark-theme {
+
+    --dashboard-bg: #0f172a;
+
+    --card-bg: #1e293b;
+
+    --card-hover: #26364d;
+
+    --border-color: #334155;
+
+    --heading: #f8fafc;
+
+    --text: #cbd5e1;
+
+    --muted: #94a3b8;
+
+    --shadow:
+        0 15px 35px rgba(0,0,0,.35);
+
+}
+
+
+/* ==========================================================
+   Dashboard Layout
+========================================================== */
+
+.dashboard {
+
+    background: var(--dashboard-bg);
+
+    min-height: calc(100vh - 80px);
+
+    padding: 2.5rem 1rem;
+
+}
+
+.dashboard-container {
+
+    max-width: 1280px;
+
+    margin: auto;
+
+}
+
+
+/* ==========================================================
+   Hero Card
+========================================================== */
+
+.hero-card {
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 24px;
+
+    box-shadow: var(--shadow);
+
+    padding: 2.5rem;
+
+    margin-bottom: 2rem;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+.hero-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 20px 40px rgba(37,99,235,.12);
+
+}
+
+.hero-content {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 3rem;
+
+    flex-wrap: wrap;
+
+}
+
+
+/* ==========================================================
+   Hero Text
+========================================================== */
+
+.hero-text {
+
+    flex: 1;
+
+    min-width: 320px;
+
+}
+
+.hero-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: .6rem;
+
+    background: var(--primary-light);
+
+    color: var(--primary);
+
+    font-size: .85rem;
+
+    font-weight: 600;
+
+    padding: .55rem 1rem;
+
+    border-radius: 999px;
+
+    margin-bottom: 1.25rem;
+
+}
+
+.hero-text h1 {
+
+    font-size: 2.8rem;
+
+    font-weight: 800;
+
+    color: var(--heading);
+
+    margin-bottom: .8rem;
+
+    line-height: 1.15;
+
+}
+
+.wave {
+
+    display: inline-block;
+
+    animation: wave 2.5s infinite;
+
+}
+
+.hero-text p {
+
+    color: var(--muted);
+
+    font-size: 1.05rem;
+
+    max-width: 600px;
+
+    line-height: 1.8;
+
+}
+
+
+/* ==========================================================
+   Security Score Card
+========================================================== */
+
+.security-score-card {
+
+    width: 280px;
+
+    background: linear-gradient(
+        135deg,
+        var(--primary),
+        #3b82f6
+    );
+
+    color: white;
+
+    border-radius: 22px;
+
+    padding: 1.75rem;
+
+    box-shadow:
+        0 18px 35px rgba(37,99,235,.30);
+
+}
+
+.score-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: .95rem;
+
+    font-weight: 600;
+
+    margin-bottom: 1.5rem;
+
+}
+
+.score-circle {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    width: 120px;
+
+    height: 120px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.15);
+
+    border:
+        6px solid rgba(255,255,255,.25);
+
+}
+
+.score-circle span {
+
+    font-size: 2rem;
+
+    font-weight: 700;
+
+}
+
+.score-progress {
+
+    width: 100%;
+
+    height: 10px;
+
+    background:
+        rgba(255,255,255,.20);
+
+    border-radius: 999px;
+
+    margin-top: 1.75rem;
+
+    overflow: hidden;
+
+}
+
+.score-progress-fill {
+
+    width: 0;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: white;
+
+    transition: width 1.2s ease;
+
+}
+
+.score-status {
+
+    display: inline-block;
+
+    margin-top: 1rem;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+}
+
+.score-status.excellent {
+
+    color: #dcfce7;
+
+}
+
+.score-status.good {
+
+    color: #fef3c7;
+
+}
+
+.score-status.improve {
+
+    color: #fee2e2;
+
+}
+
+
+/* ==========================================================
+   Animation
+========================================================== */
+
+@keyframes wave {
+
+    0% {
+
+        transform: rotate(0deg);
+
+    }
+
+    20% {
+
+        transform: rotate(14deg);
+
+    }
+
+    40% {
+
+        transform: rotate(-8deg);
+
+    }
+
+    60% {
+
+        transform: rotate(14deg);
+
+    }
+
+    80% {
+
+        transform: rotate(-4deg);
+
+    }
+
+    100% {
+
+        transform: rotate(0deg);
+
+    }
+
+}
+/* ==========================================================
+   Statistics Grid
+========================================================== */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(240px, 1fr)
+    );
+
+    gap: 1.5rem;
+
+    margin-bottom: 2rem;
+
+}
+
+
+/* ==========================================================
+   Statistics Card
+========================================================== */
+
+.stat-card {
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 20px;
+
+    padding: 1.5rem;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1.25rem;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
+    box-shadow: var(--shadow);
+
+}
+
+.stat-card:hover {
+
+    transform: translateY(-5px);
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 18px 40px rgba(37,99,235,.15);
+
+}
+
+
+/* ==========================================================
+   Statistic Icons
+========================================================== */
+
+.stat-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: rgba(37,99,235,.10);
+
+    color: var(--primary);
+
+    font-size: 1.45rem;
+
+    flex-shrink: 0;
+
+}
+
+.stat-icon.success {
+
+    background: rgba(34,197,94,.12);
+
+    color: var(--success);
+
+}
+
+.stat-icon.danger {
+
+    background: rgba(239,68,68,.12);
+
+    color: var(--danger);
+
+}
+
+.stat-icon.warning {
+
+    background: rgba(245,158,11,.15);
+
+    color: var(--warning);
+
+}
+
+
+/* ==========================================================
+   Statistic Content
+========================================================== */
+
+.stat-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: .35rem;
+
+    min-width: 0;
+
+}
+
+.stat-title {
+
+    color: var(--muted);
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: .06em;
+
+}
+
+.stat-content h2 {
+
+    color: var(--heading);
+
+    font-size: 1.55rem;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    margin: 0;
+
+}
+
+
+/* ==========================================================
+   Long Values
+========================================================== */
+
+.ip-address {
+
+    font-size: 1rem !important;
+
+    word-break: break-word;
+
+    font-family:
+        Consolas,
+        Monaco,
+        monospace;
+
+}
+
+
+/* ==========================================================
+   Dashboard Grid
+========================================================== */
+
+.dashboard-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 2rem;
+
+    margin-bottom: 2rem;
+
+}
+
+
+/* ==========================================================
+   Generic Dashboard Card
+========================================================== */
+
+.dashboard-card {
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 22px;
+
+    box-shadow: var(--shadow);
+
+    padding: 1.75rem;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+
+}
+
+.dashboard-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 18px 40px rgba(37,99,235,.12);
+
+}
+
+
+/* ==========================================================
+   Card Header
+========================================================== */
+
+.card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 1.5rem;
+
+}
+
+.card-header h2 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .7rem;
+
+    color: var(--heading);
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+}
+
+.card-header i {
+
+    color: var(--primary);
+
+}
+
+
+/* ==========================================================
+   Card Animation
+========================================================== */
+
+.stat-card,
+.dashboard-card,
+.hero-card {
+
+    animation: fadeUp .45s ease;
+
+}
+
+@keyframes fadeUp {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(18px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+/* ==========================================================
+   Security List
+========================================================== */
+
+.security-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1rem;
+
+}
+
+.security-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    padding: 1rem 0;
+
+    border-bottom: 1px solid var(--border-color);
+
+}
+
+.security-item:last-child {
+
+    border-bottom: none;
+
+}
+
+.security-label {
+
+    color: var(--text);
+
+    font-size: .96rem;
+
+    font-weight: 600;
+
+}
+
+
+/* ==========================================================
+   Status Badges
+========================================================== */
+
+.status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: .45rem;
+
+    padding: .45rem .9rem;
+
+    border-radius: 999px;
+
+    font-size: .82rem;
+
+    font-weight: 700;
+
+    letter-spacing: .02em;
+
+    white-space: nowrap;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+.status-badge:hover {
+
+    transform: scale(1.05);
+
+}
+
+.status-badge.success {
+
+    background: rgba(34,197,94,.12);
+
+    color: var(--success);
+
+}
+
+.status-badge.warning {
+
+    background: rgba(245,158,11,.14);
+
+    color: var(--warning);
+
+}
+
+.status-badge.danger {
+
+    background: rgba(239,68,68,.12);
+
+    color: var(--danger);
+
+}
+
+
+/* ==========================================================
+   Recent Login Activity
+========================================================== */
+
+.activity-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1rem;
+
+}
+
+.activity-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    padding: 1rem;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 16px;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+
+}
+
+.activity-item:hover {
+
+    transform: translateX(6px);
+
+    border-color: var(--primary);
+
+    background: var(--card-hover);
+
+}
+
+
+/* ==========================================================
+   Activity Icon
+========================================================== */
+
+.activity-icon {
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: rgba(37,99,235,.08);
+
+    flex-shrink: 0;
+
+}
+
+.activity-icon i {
+
+    font-size: 1.2rem;
+
+}
+
+.activity-icon .success {
+
+    color: var(--success);
+
+}
+
+.activity-icon .danger {
+
+    color: var(--danger);
+
+}
+
+
+/* ==========================================================
+   Activity Content
+========================================================== */
+
+.activity-content {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: .35rem;
+
+    min-width: 0;
+
+}
+
+.activity-content strong {
+
+    color: var(--heading);
+
+    font-size: .95rem;
+
+}
+
+.activity-content small {
+
+    color: var(--muted);
+
+    overflow-wrap: anywhere;
+
+}
+
+.activity-date {
+
+    color: var(--muted);
+
+    font-size: .8rem;
+
+    font-weight: 600;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+}
+
+
+/* ==========================================================
+   Empty State
+========================================================== */
+
+.empty-state {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 1rem;
+
+    text-align: center;
+
+    padding: 3rem 1rem;
+
+    color: var(--muted);
+
+}
+
+.empty-state i {
+
+    font-size: 3rem;
+
+    color: var(--primary);
+
+}
+
+.empty-state p {
+
+    margin: 0;
+
+}
+
+
+/* ==========================================================
+   Better Scroll (Future Proof)
+========================================================== */
+
+.activity-list::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+.activity-list::-webkit-scrollbar-thumb {
+
+    background: var(--border-color);
+
+    border-radius: 999px;
+
+}
+
+.activity-list::-webkit-scrollbar-thumb:hover {
+
+    background: var(--primary);
+
+}
+/* ==========================================================
+   Quick Actions
+========================================================== */
+
+.quick-actions {
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 22px;
+
+    padding: 2rem;
+
+    box-shadow: var(--shadow);
+
+    margin-bottom: 2rem;
+
+}
+
+.action-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+    );
+
+    gap: 1.5rem;
+
+    margin-top: 1.5rem;
+
+}
+
+
+/* ==========================================================
+   Action Card
+========================================================== */
+
+.action-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 1rem;
+
+    padding: 2rem;
+
+    text-decoration: none;
+
+    background: var(--dashboard-bg);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 18px;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+
+    cursor: pointer;
+
+}
+
+.action-card:hover {
+
+    transform: translateY(-6px);
+
+    border-color: var(--primary);
+
+    background: var(--card-hover);
+
+    box-shadow:
+        0 18px 40px rgba(37,99,235,.12);
+
+}
+
+
+/* ==========================================================
+   Action Icons
+========================================================== */
+
+.action-card i {
+
+    width: 64px;
+
+    height: 64px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: rgba(37,99,235,.12);
+
+    color: var(--primary);
+
+    font-size: 1.5rem;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+
+}
+
+.action-card:hover i {
+
+    transform: scale(1.12);
+
+}
+
+
+/* ==========================================================
+   Action Text
+========================================================== */
+
+.action-card span {
+
+    color: var(--heading);
+
+    font-weight: 700;
+
+    font-size: 1rem;
+
+}
+
+
+/* ==========================================================
+   Logout Card
+========================================================== */
+
+.action-card.logout i {
+
+    background: rgba(239,68,68,.12);
+
+    color: var(--danger);
+
+}
+
+.action-card.logout:hover {
+
+    border-color: var(--danger);
+
+    box-shadow:
+        0 18px 40px rgba(239,68,68,.18);
+
+}
+
+
+/* ==========================================================
+   Focus State
+========================================================== */
+
+.action-card:focus-visible {
+
+    outline: 3px solid rgba(37,99,235,.35);
+
+    outline-offset: 4px;
+
+}
+
+
+/* ==========================================================
+   Micro Animations
+========================================================== */
+
+.hero-card,
+.stat-card,
+.dashboard-card,
+.quick-actions {
+
+    animation: cardAppear .5s ease both;
+
+}
+
+@keyframes cardAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(16px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* ==========================================================
+   Better Text Selection
+========================================================== */
+
+.dashboard ::selection {
+
+    background: rgba(37,99,235,.25);
+
+}
+
+
+/* ==========================================================
+   Smooth Scrolling
+========================================================== */
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+/* ==========================================================
+   Responsive Design
+========================================================== */
+
+@media (max-width: 1100px) {
+
+    .hero-content {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    .security-score-card {
+
+        width: 100%;
+
+        max-width: 380px;
+
+        margin: auto;
+
+    }
+
+    .dashboard-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .dashboard {
+
+        padding: 1.5rem .75rem;
+
+    }
+
+    .hero-card {
+
+        padding: 1.75rem;
+
+    }
+
+    .hero-text h1 {
+
+        font-size: 2rem;
+
+    }
+
+    .hero-text p {
+
+        font-size: .95rem;
+
+    }
+
+    .stats-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .action-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .activity-item {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .activity-date {
+
+        margin-left: 60px;
+
+        text-align: left;
+
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .hero-badge {
+
+        font-size: .75rem;
+
+    }
+
+    .score-circle {
+
+        width: 90px;
+
+        height: 90px;
+
+    }
+
+    .score-circle span {
+
+        font-size: 1.4rem;
+
+    }
+
+    .stat-icon {
+
+        width: 52px;
+
+        height: 52px;
+
+        font-size: 1.2rem;
+
+    }
+
+}
+
+
+/* ==========================================================
+   Dark Theme Refinements
+========================================================== */
+
+body.dark-theme .hero-card,
+body.dark-theme .dashboard-card,
+body.dark-theme .quick-actions,
+body.dark-theme .stat-card {
+
+    background: #1e293b;
+
+    border-color: #334155;
+
+}
+
+body.dark-theme .hero-card:hover,
+body.dark-theme .dashboard-card:hover,
+body.dark-theme .stat-card:hover {
+
+    box-shadow:
+        0 20px 40px rgba(59,130,246,.18);
+
+}
+
+body.dark-theme .activity-item {
+
+    background: rgba(255,255,255,.02);
+
+}
+
+body.dark-theme .activity-item:hover {
+
+    background: rgba(255,255,255,.05);
+
+}
+
+body.dark-theme .action-card {
+
+    background: #0f172a;
+
+}
+
+body.dark-theme .action-card:hover {
+
+    background: #162234;
+
+}
+
+
+/* ==========================================================
+   Progress Bar Animation
+========================================================== */
+
+.score-progress-fill {
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+.score-progress-fill::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.45),
+            transparent
+        );
+
+    transform: translateX(-100%);
+
+    animation: shine 2.8s infinite;
+
+}
+
+@keyframes shine {
+
+    to {
+
+        transform: translateX(200%);
+
+    }
+
+}
+
+
+/* ==========================================================
+   Better Hover Effects
+========================================================== */
+
+.stat-card:hover .stat-icon {
+
+    transform: rotate(-6deg) scale(1.08);
+
+}
+
+.action-card:hover span {
+
+    color: var(--primary);
+
+}
+
+.dashboard-card:hover .card-header i {
+
+    transform: scale(1.1);
+
+}
+
+.card-header i,
+.stat-icon,
+.action-card i {
+
+    transition: .25s ease;
+
+}
+
+
+/* ==========================================================
+   Accessibility
+========================================================== */
+
+a,
+button {
+
+    transition:
+        background .25s ease,
+        color .25s ease,
+        transform .25s ease;
+
+}
+
+.action-card:focus-visible,
+.stat-card:focus-visible {
+
+    outline: 3px solid rgba(37,99,235,.4);
+
+    outline-offset: 3px;
+
+}
+
+
+/* ==========================================================
+   Final Polish
+========================================================== */
+
+.dashboard-card,
+.stat-card,
+.hero-card,
+.quick-actions {
+
+    backdrop-filter: blur(12px);
+
+}
+
+.dashboard {
+
+    animation: fadeDashboard .45s ease;
+
+}
+
+@keyframes fadeDashboard {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}

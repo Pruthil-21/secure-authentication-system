@@ -24,7 +24,10 @@ from authentication.forms import (
     RegistrationForm,
 )
 from authentication.services import AuthService
-
+from authentication.models import LoginHistory
+from authentication.services.dashboard_service import (
+    DashboardService,
+)
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -160,7 +163,7 @@ def login():
 
         success, message, user = AuthService.login_user(
             form,
-            request.remote_addr,
+            request,
         )
 
         if success:
@@ -231,14 +234,21 @@ def logout():
 # Dashboard
 # ==========================================================
 
-from flask_login import login_required
-
-
 @auth_bp.route("/dashboard")
 @login_required
 def dashboard():
+    """
+    User dashboard.
+    """
 
-    return render_template("pages/dashboard.html")
+    dashboard_data = DashboardService.get_dashboard_data(
+        current_user
+    )
+
+    return render_template(
+        "pages/dashboard.html",
+        **dashboard_data,
+    )
 
 # ==========================================================
 # Forgot Password
