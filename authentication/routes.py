@@ -12,7 +12,11 @@ from flask import (
     url_for,
 )
 
-from authentication.forms import RegistrationForm
+from flask_login import login_user
+from authentication.forms import (
+    LoginForm,
+    RegistrationForm,
+)
 from authentication.services import AuthService
 
 
@@ -141,21 +145,67 @@ def check_email():
 # Login
 # ==========================================================
 
-@auth_bp.route("/login")
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
 
-    return render_template("pages/login.html")
+    form = LoginForm()
 
+    if form.validate_on_submit():
+
+        success, message, user = AuthService.login_user(form)
+
+        if success:
+
+            login_user(
+
+                user,
+
+                remember=form.remember.data,
+
+            )
+
+            flash(
+
+                "Welcome back!",
+
+                "success",
+
+            )
+
+            return redirect(
+
+                url_for("auth.dashboard")
+
+            )
+
+        flash(
+
+            message,
+
+            "danger",
+
+        )
+
+    return render_template(
+
+        "pages/login.html",
+
+        form=form,
+
+    )
 
 # ==========================================================
 # Dashboard
 # ==========================================================
 
+from flask_login import login_required
+
+
 @auth_bp.route("/dashboard")
+@login_required
 def dashboard():
 
     return render_template("pages/dashboard.html")
-
 
 # ==========================================================
 # Forgot Password

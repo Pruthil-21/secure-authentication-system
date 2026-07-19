@@ -531,7 +531,17 @@ function getFieldState(valid) {
    Validation Message Helper
 ========================================================== */
 
-function setValidationMessage(element, message, valid) {
+function setValidationMessage(
+
+    element,
+
+    message,
+
+    valid,
+
+    allowHtml = false
+
+) {
 
     if (!element) {
 
@@ -539,7 +549,17 @@ function setValidationMessage(element, message, valid) {
 
     }
 
-    element.textContent = message;
+    if (allowHtml) {
+
+        element.innerHTML = message;
+
+    }
+
+    else {
+
+        element.textContent = message;
+
+    }
 
     element.style.color = valid
 
@@ -548,7 +568,6 @@ function setValidationMessage(element, message, valid) {
         : "#DC2626";
 
 }
-
 
 /* ==========================================================
    Password Requirement Labels

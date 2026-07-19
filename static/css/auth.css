@@ -640,3 +640,27 @@ input:-webkit-autofill:active {
     text-decoration: underline;
 
 }
+
+.validation-message {
+
+    display: block;
+
+    margin-top: .45rem;
+
+    font-size: .875rem;
+
+    font-weight: 500;
+
+}
+
+.validation-message.success {
+
+    color: #16A34A;
+
+}
+
+.validation-message.error {
+
+    color: #DC2626;
+
+}

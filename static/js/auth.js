@@ -18,14 +18,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initializeAuthentication() {
 
-    initializeRegistration();
-
     initializePasswordVisibility();
 
     initializePreventDoubleSubmit();
 
-}
+    if (document.getElementById("register-form")) {
 
+        initializeRegistration();
+
+    }
+
+}
 
 /* ==========================================================
    Registration
@@ -33,7 +36,7 @@ function initializeAuthentication() {
 
 function initializeRegistration() {
 
-    const form = document.getElementById("registration-form");
+    const form = document.getElementById("register-form");
 
     let usernameTimeout;
 
@@ -267,88 +270,88 @@ function initializeRegistration() {
 
     function updatePasswordChecklist() {
 
-    if (!touched.password) {
+        if (!touched.password) {
 
-        return;
+            return;
 
-    }
+        }
 
-    const checks = Validation.getPasswordChecklist(
-        password.value
-    );
-
-    updateChecklistItem(
-        "check-length",
-        checks.length
-    );
-
-    updateChecklistItem(
-        "check-uppercase",
-        checks.uppercase
-    );
-
-    updateChecklistItem(
-        "check-lowercase",
-        checks.lowercase
-    );
-
-    updateChecklistItem(
-        "check-number",
-        checks.number
-    );
-
-    updateChecklistItem(
-        "check-special",
-        checks.special
-    );
-
-    const warnings =
-        document.getElementById(
-            "password-warnings"
+        const checks = Validation.getPasswordChecklist(
+            password.value
         );
 
-    warnings.innerHTML = "";
+        updateChecklistItem(
+            "check-length",
+            checks.length
+        );
 
-    if (!checks.repeated) {
+        updateChecklistItem(
+            "check-uppercase",
+            checks.uppercase
+        );
 
-        warnings.innerHTML +=
+        updateChecklistItem(
+            "check-lowercase",
+            checks.lowercase
+        );
 
-        `
+        updateChecklistItem(
+            "check-number",
+            checks.number
+        );
+
+        updateChecklistItem(
+            "check-special",
+            checks.special
+        );
+
+        const warnings =
+            document.getElementById(
+                "password-warnings"
+            );
+
+        warnings.innerHTML = "";
+
+        if (!checks.repeated) {
+
+            warnings.innerHTML +=
+
+                `
         <div class="password-warning">
             <i class="fa-solid fa-triangle-exclamation"></i>
             Repeated characters detected
         </div>
         `;
 
-    }
+        }
 
-    if (!checks.sequence) {
+        if (!checks.sequence) {
 
-        warnings.innerHTML +=
+            warnings.innerHTML +=
 
-        `
+                `
         <div class="password-warning">
             <i class="fa-solid fa-triangle-exclamation"></i>
             Sequential numbers detected
         </div>
         `;
 
-    }
+        }
 
-    if (!checks.commonWord) {
+        if (!checks.commonWord) {
 
-        warnings.innerHTML +=
+            warnings.innerHTML +=
 
-        `
+                `
         <div class="password-warning">
             <i class="fa-solid fa-triangle-exclamation"></i>
             Common password detected
         </div>
         `;
 
-    }
+        }
 
-}
+    }
 
 
     /* -----------------------------------------
@@ -442,31 +445,33 @@ function initializeRegistration() {
 
         );
 
-        Validation.setValidationMessage(
+        if (!valid) {
 
-            usernameValidation,
+            Validation.setValidationMessage(
 
-            valid
-                ? "✓ Username format looks good"
-                : "Only letters, numbers and underscores",
+                usernameValidation,
 
-            valid
+                "Only letters, numbers and underscores",
 
-        );
+                false
 
-        setInputState(
+            );
 
-            username,
+            setInputState(
 
-            valid
+                username,
 
-        );
+                false
+
+            );
+
+        }
 
     }
 
     /* -----------------------------------------
-       Email Validation
-    ----------------------------------------- */
+      Email Validation
+   ----------------------------------------- */
 
     function updateEmailValidation() {
 
@@ -482,228 +487,222 @@ function initializeRegistration() {
 
         );
 
+        if (!valid) {
+
+            Validation.setValidationMessage(
+
+                emailValidation,
+
+                "Please enter a valid email address",
+
+                false
+
+            );
+
+            setInputState(
+
+                email,
+
+                false
+
+            );
+
+        }
+
+    }
+
+    /* -----------------------------------------
+       Password Match
+    ----------------------------------------- */
+
+    function updatePasswordMatch() {
+
+        if (!touched.confirmPassword) {
+
+            return;
+
+        }
+
+        const state = Validation.getPasswordMatchState(
+
+            password.value,
+
+            confirmPassword.value
+
+        );
+
         Validation.setValidationMessage(
 
-            emailValidation,
+            confirmValidation,
 
-            valid
-                ? "✓ Valid email address"
-                : "Please enter a valid email address",
+            state.message,
 
-            valid
+            state.valid
 
         );
 
         setInputState(
 
-            email,
+            confirmPassword,
 
-            valid
-
-        );
-
-    }
-
-
-/* -----------------------------------------
-   Password Match
------------------------------------------ */
-
-function updatePasswordMatch() {
-
-    if (!touched.confirmPassword) {
-
-        return;
-
-    }
-
-    const state = Validation.getPasswordMatchState(
-
-        password.value,
-
-        confirmPassword.value
-
-    );
-
-    Validation.setValidationMessage(
-
-        confirmValidation,
-
-        state.message,
-
-        state.valid
-
-    );
-
-    setInputState(
-
-        confirmPassword,
-
-        state.valid
-
-    );
-
-}
-
-
-/* -----------------------------------------
-   Username Availability
------------------------------------------ */
-
-async function checkUsernameAvailability() {
-
-    if (!Validation.isValidUsername(username.value)) {
-
-        usernameAvailable = false;
-
-        return;
-
-    }
-
-    try {
-
-        const response = await fetch(
-
-            `/check-username?username=${encodeURIComponent(username.value)}`
+            state.valid
 
         );
 
-        const data = await response.json();
+    }
 
-        usernameAvailable = data.available;
 
-        if (data.available) {
+    /* -----------------------------------------
+       Username Availability
+    ----------------------------------------- */
 
-            usernameValidation.innerHTML =
+    async function checkUsernameAvailability() {
 
-                "✓ Username is available.";
+        if (!Validation.isValidUsername(username.value)) {
 
-            usernameValidation.className =
+            usernameAvailable = false;
 
-                "validation-message success";
+            return;
 
         }
 
-        else {
+        try {
 
-            usernameValidation.innerHTML =
+            const response = await fetch(
 
-                `✖ Username already exists.
-                <a href="/login" class="validation-link">
-                    Login instead →
-                </a>`;
+                `/check-username?username=${encodeURIComponent(username.value)}`
 
-            usernameValidation.className =
+            );
 
-                "validation-message error";
+            const data = await response.json();
 
-        }
+            usernameAvailable = data.available;
 
-        setInputState(
+            Validation.setValidationMessage(
 
-            username,
+                usernameValidation,
 
-            data.available
+                data.available
 
-        );
+                    ? "✓ Username is available."
 
-        updateSubmitButton();
+                    : "✖ Username already exists.",
 
-    }
+                data.available
 
-    catch (error) {
+            );
 
-        console.error(
+            setInputState(
 
-            "Username check failed:",
+                username,
 
-            error
+                data.available
 
-        );
+            );
 
-    }
-
-}
-
-
-/* -----------------------------------------
-   Email Availability
------------------------------------------ */
-
-async function checkEmailAvailability() {
-
-    if (!Validation.isValidEmail(email.value)) {
-
-        emailAvailable = false;
-
-        return;
-
-    }
-
-    try {
-
-        const response = await fetch(
-
-            `/check-email?email=${encodeURIComponent(email.value)}`
-
-        );
-
-        const data = await response.json();
-
-        emailAvailable = data.available;
-
-        if (data.available) {
-
-            emailValidation.innerHTML =
-
-                "✓ Email is available.";
-
-            emailValidation.className =
-
-                "validation-message success";
+            updateSubmitButton();
 
         }
 
-        else {
+        catch (error) {
 
-            emailValidation.innerHTML =
+            console.error(
 
-                `✖ An account with this email already exists.
-                <a href="/login" class="validation-link">
-                    Login instead →
-                </a>`;
+                "Username check failed:",
 
-            emailValidation.className =
+                error
 
-                "validation-message error";
+            );
 
         }
 
-        setInputState(
-
-            email,
-
-            data.available
-
-        );
-
-        updateSubmitButton();
-
     }
 
-    catch (error) {
 
-        console.error(
+    /* -----------------------------------------
+       Email Availability
+    ----------------------------------------- */
 
-            "Email check failed:",
+    async function checkEmailAvailability() {
 
-            error
+        if (!Validation.isValidEmail(email.value)) {
 
-        );
+            emailAvailable = false;
+
+            return;
+
+        }
+
+        try {
+
+            const response = await fetch(
+
+                `/check-email?email=${encodeURIComponent(email.value)}`
+
+            );
+
+            const data = await response.json();
+
+            emailAvailable = data.available;
+
+            if (data.available) {
+
+                Validation.setValidationMessage(
+
+                    emailValidation,
+
+                    "✓ Email is available.",
+
+                    true
+
+                );
+
+            }
+
+            else {
+
+                Validation.setValidationMessage(
+
+                    emailValidation,
+
+                    `✖ An account with this email already exists.
+        <a href="/login" class="validation-link">
+            Login instead →
+        </a>`,
+
+                    false,
+
+                    true
+
+                );
+
+            }
+
+            setInputState(
+
+                email,
+
+                data.available
+
+            );
+
+            updateSubmitButton();
+
+        }
+
+        catch (error) {
+
+            console.error(
+
+                "Email check failed:",
+
+                error
+
+            );
+
+        }
 
     }
-
-}
     /* -----------------------------------------
    Submit Button
 ----------------------------------------- */
@@ -816,7 +815,7 @@ function initializePreventDoubleSubmit() {
 
             const submitButton = form.querySelector(
 
-                "#register-button, button[type='submit'], input[type='submit']"
+                "button[type='submit'], input[type='submit']"
 
             );
 
@@ -826,7 +825,6 @@ function initializePreventDoubleSubmit() {
 
             }
 
-            // Prevent accidental submission if somehow triggered
             if (submitButton.disabled) {
 
                 event.preventDefault();
@@ -837,22 +835,35 @@ function initializePreventDoubleSubmit() {
 
             submitButton.disabled = true;
 
+            let loadingText = "Processing...";
+
+            if (form.id === "register-form") {
+
+                loadingText = "Creating Account...";
+
+            }
+
+            else if (form.id === "login-form") {
+
+                loadingText = "Signing In...";
+
+            }
+
             if (submitButton.tagName === "BUTTON") {
 
                 submitButton.dataset.originalText =
+
                     submitButton.innerHTML;
 
                 submitButton.innerHTML =
 
-                    '<i class="fa-solid fa-spinner fa-spin"></i> Creating Account...';
+                    `<i class="fa-solid fa-spinner fa-spin"></i> ${loadingText}`;
 
             }
 
             else {
 
-                submitButton.value =
-
-                    "Creating Account...";
+                submitButton.value = loadingText;
 
             }
 
@@ -861,7 +872,6 @@ function initializePreventDoubleSubmit() {
     });
 
 }
-
 
 /* ==========================================================
    Utility

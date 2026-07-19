@@ -22,6 +22,8 @@ function initializeApplication() {
 
     initializeThemeToggle();
 
+    initializeFlashMessages();
+
 }
 
 
@@ -105,3 +107,90 @@ function updateThemeIcon() {
 
 }
 
+
+/* ==========================================================
+   Flash Messages
+========================================================== */
+
+function initializeFlashMessages() {
+
+    const flashMessages = document.querySelectorAll(
+
+        ".flash-message"
+
+    );
+
+    flashMessages.forEach(message => {
+
+        const closeButton = message.querySelector(
+
+            ".flash-close"
+
+        );
+
+        if (closeButton) {
+
+            closeButton.addEventListener(
+
+                "click",
+
+                () => {
+
+                    hideFlashMessage(message);
+
+                }
+
+            );
+
+        }
+
+        setTimeout(() => {
+
+            hideFlashMessage(message);
+
+        }, 5000);
+
+    });
+
+}
+
+
+function hideFlashMessage(message) {
+
+    if (
+
+        !message ||
+
+        message.classList.contains("flash-hide")
+
+    ) {
+
+        return;
+
+    }
+
+    message.classList.add(
+
+        "flash-hide"
+
+    );
+
+    message.addEventListener(
+
+        "animationend",
+
+        () => {
+
+            message.remove();
+
+        },
+
+        {
+
+            once: true
+
+        }
+
+    );
+
+}

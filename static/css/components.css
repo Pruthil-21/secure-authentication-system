@@ -450,3 +450,187 @@
     color: var(--text-light);
 
 }
+
+/* ==========================================================
+   Flash Messages
+========================================================== */
+
+.flash-container {
+
+    position: fixed;
+
+    top: 95px;
+
+    right: 1.5rem;
+
+    z-index: 3000;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: .85rem;
+
+    width: min(420px, calc(100vw - 2rem));
+
+}
+
+.flash-message {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding: 1rem 1.15rem;
+
+    border-radius: var(--border-radius);
+
+    box-shadow: var(--shadow-lg);
+
+    border-left: 5px solid transparent;
+
+    animation: flashSlideIn .35s ease;
+
+}
+
+.flash-content {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .75rem;
+
+    flex: 1;
+
+}
+
+.flash-content i {
+
+    font-size: 1.15rem;
+
+}
+
+.flash-content span {
+
+    line-height: 1.5;
+
+    font-weight: 500;
+
+}
+
+.flash-success {
+
+    background: rgba(22,163,74,.12);
+
+    border-left-color: #16A34A;
+
+    color: #16A34A;
+
+}
+
+.flash-danger {
+
+    background: rgba(220,38,38,.12);
+
+    border-left-color: #DC2626;
+
+    color: #DC2626;
+
+}
+
+.flash-warning {
+
+    background: rgba(245,158,11,.12);
+
+    border-left-color: #F59E0B;
+
+    color: #F59E0B;
+
+}
+
+.flash-info {
+
+    background: rgba(37,99,235,.12);
+
+    border-left-color: var(--primary-color);
+
+    color: var(--primary-color);
+
+}
+
+.flash-close {
+
+    border: none;
+
+    background: transparent;
+
+    color: inherit;
+
+    cursor: pointer;
+
+    opacity: .75;
+
+    transition: var(--transition);
+
+    font-size: 1rem;
+
+}
+
+.flash-close:hover {
+
+    opacity: 1;
+
+    transform: scale(1.1);
+
+}
+
+.flash-hide {
+
+    animation: flashSlideOut .3s ease forwards;
+
+}
+
+@keyframes flashSlideIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateX(40px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateX(0);
+
+    }
+
+}
+
+@keyframes flashSlideOut {
+
+    from {
+
+        opacity: 1;
+
+        transform: translateX(0);
+
+    }
+
+    to {
+
+        opacity: 0;
+
+        transform: translateX(40px);
+
+    }
+
+}
