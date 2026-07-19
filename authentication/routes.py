@@ -13,23 +13,42 @@ from flask import (
 )
 
 from flask_login import (
+    current_user,
     login_required,
     login_user,
     logout_user,
-    current_user,
 )
 
 from authentication.forms import (
     LoginForm,
     RegistrationForm,
 )
-from authentication.services import AuthService
-from authentication.models import LoginHistory
+
+from authentication.forms.profile_forms import (
+    UpdateProfileForm,
+)
+
+from authentication.models import (
+    LoginHistory,
+    User,
+)
+
+from authentication.services import (
+    AuthService,
+)
+
 from authentication.services.dashboard_service import (
     DashboardService,
 )
 
-auth_bp = Blueprint("auth", __name__)
+from authentication.services.profile_service import (
+    ProfileService,
+)
+
+auth_bp = Blueprint(
+    "auth",
+    __name__,
+)
 
 
 # ==========================================================
@@ -39,21 +58,28 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/")
 def home():
 
-    return render_template("pages/home.html")
+    return render_template(
+        "pages/home.html",
+    )
 
 
 # ==========================================================
 # Register
 # ==========================================================
 
-@auth_bp.route("/register", methods=["GET", "POST"])
+@auth_bp.route(
+    "/register",
+    methods=["GET", "POST"],
+)
 def register():
 
     form = RegistrationForm()
 
     if form.validate_on_submit():
 
-        success, message = AuthService.register_user(form)
+        success, message = AuthService.register_user(
+            form,
+        )
 
         if success:
 
@@ -62,7 +88,9 @@ def register():
                 "success",
             )
 
-            return redirect(url_for("auth.login"))
+            return redirect(
+                url_for("auth.login")
+            )
 
         flash(
             message,
@@ -74,54 +102,42 @@ def register():
         form=form,
     )
 
+
 # ==========================================================
-# Check Username Availability
+# Username Availability API
 # ==========================================================
-
-from flask import jsonify
-
-from authentication.models import User
-
 
 @auth_bp.route("/check-username")
 def check_username():
 
     username = request.args.get(
         "username",
-        ""
+        "",
     ).strip()
 
     if len(username) < 3:
 
         return jsonify(
-
             available=False,
-
-            message="Username is too short."
-
+            message="Username is too short.",
         )
 
     exists = User.query.filter_by(
-
-        username=username
-
+        username=username,
     ).first()
 
     return jsonify(
-
         available=not bool(exists),
-
         message=(
             "Username is available."
             if not exists
             else "Username already exists."
-        )
-
+        ),
     )
 
 
 # ==========================================================
-# Check Email Availability
+# Email Availability API
 # ==========================================================
 
 @auth_bp.route("/check-email")
@@ -129,32 +145,31 @@ def check_email():
 
     email = request.args.get(
         "email",
-        ""
+        "",
     ).strip().lower()
 
     exists = User.query.filter_by(
-
-        email=email
-
+        email=email,
     ).first()
 
     return jsonify(
-
         available=not bool(exists),
-
         message=(
             "Email is available."
             if not exists
             else "An account with this email already exists."
-        )
-
+        ),
     )
+
 
 # ==========================================================
 # Login
 # ==========================================================
 
-@auth_bp.route("/login", methods=["GET", "POST"])
+@auth_bp.route(
+    "/login",
+    methods=["GET", "POST"],
+)
 def login():
 
     form = LoginForm()
@@ -169,66 +184,92 @@ def login():
         if success:
 
             login_user(
-
                 user,
-
                 remember=form.remember.data,
-
             )
 
             flash(
-
                 "Welcome back!",
-
                 "success",
-
             )
 
             return redirect(
-
                 url_for("auth.dashboard")
-
             )
 
         flash(
-
             message,
-
             "danger",
-
         )
 
     return render_template(
-
         "pages/login.html",
-
         form=form,
-
     )
-
 # ==========================================================
-# Logout
+# Profile
 # ==========================================================
 
-@auth_bp.route("/logout")
+@auth_bp.route(
+    "/profile",
+    methods=["GET", "POST"],
+)
 @login_required
-def logout():
+def profile():
+    """
+    Display and update the authenticated user's profile.
+    """
 
-    logout_user()
+    form = UpdateProfileForm()
 
-    flash(
+    form.current_user = current_user
 
-        "You have been logged out successfully.",
+    if form.validate_on_submit():
 
-        "success",
+        changes = ProfileService.update_profile(
+            current_user,
+            form,
+        )
 
+        if changes:
+
+            flash(
+                (
+                    "Profile updated successfully. "
+                    "Updated: "
+                    + ", ".join(changes)
+                ),
+                "success",
+            )
+
+        else:
+
+            flash(
+                "No changes were made.",
+                "info",
+            )
+
+        return redirect(
+            url_for("auth.profile")
+        )
+
+    if request.method == "GET":
+
+        ProfileService.populate_form(
+            form,
+            current_user,
+        )
+
+    profile_data = ProfileService.get_profile_data(
+        current_user,
     )
 
-    return redirect(
-
-        url_for("auth.login")
-
+    return render_template(
+        "pages/profile.html",
+        form=form,
+        profile=profile_data,
     )
+
 
 # ==========================================================
 # Dashboard
@@ -242,13 +283,37 @@ def dashboard():
     """
 
     dashboard_data = DashboardService.get_dashboard_data(
-        current_user
+        current_user,
     )
 
     return render_template(
         "pages/dashboard.html",
         **dashboard_data,
     )
+
+
+# ==========================================================
+# Logout
+# ==========================================================
+
+@auth_bp.route("/logout")
+@login_required
+def logout():
+    """
+    Log out the current user.
+    """
+
+    logout_user()
+
+    flash(
+        "You have been logged out successfully.",
+        "success",
+    )
+
+    return redirect(
+        url_for("auth.login")
+    )
+
 
 # ==========================================================
 # Forgot Password
@@ -257,7 +322,9 @@ def dashboard():
 @auth_bp.route("/forgot-password")
 def forgot_password():
 
-    return render_template("pages/forgot_password.html")
+    return render_template(
+        "pages/forgot_password.html",
+    )
 
 
 # ==========================================================
@@ -267,7 +334,9 @@ def forgot_password():
 @auth_bp.route("/reset-password")
 def reset_password():
 
-    return render_template("pages/reset_password.html")
+    return render_template(
+        "pages/reset_password.html",
+    )
 
 
 # ==========================================================
@@ -278,7 +347,9 @@ def reset_password():
 @login_required
 def security_center():
 
-    return render_template("pages/security_center.html")
+    return render_template(
+        "pages/security_center.html",
+    )
 
 
 # ==========================================================
@@ -288,7 +359,9 @@ def security_center():
 @auth_bp.route("/verify-email")
 def verify_email():
 
-    return render_template("pages/verify_email.html")
+    return render_template(
+        "pages/verify_email.html",
+    )
 
 
 # ==========================================================
@@ -298,15 +371,6 @@ def verify_email():
 @auth_bp.route("/verify-login-otp")
 def verify_login_otp():
 
-    return render_template("pages/verify_login_otp.html")
-
-
-# ==========================================================
-# Profile
-# ==========================================================
-
-@auth_bp.route("/profile")
-@login_required
-def profile():
-
-    return render_template("pages/profile.html")
+    return render_template(
+        "pages/verify_login_otp.html",
+    )

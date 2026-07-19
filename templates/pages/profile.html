@@ -1,0 +1,278 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block page_css %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<section class="profile-page">
+
+    <div class="profile-container">
+
+        <!-- ==========================================
+             Page Header
+        =========================================== -->
+
+        <section class="profile-header">
+
+            <div class="profile-header-content">
+
+                <span class="profile-badge">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    Personal Profile
+
+                </span>
+
+                <h1>
+
+                    {{ current_user.full_name }}
+
+                </h1>
+
+                <p>
+
+                    Manage your personal account information.
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+             Main Grid
+        =========================================== -->
+
+        <section class="profile-grid">
+
+            <!-- ======================================
+                 Personal Information
+            ======================================= -->
+
+            <article class="profile-card">
+
+                <div class="card-header">
+
+                    <h2>
+
+                        <i class="fa-solid fa-id-card"></i>
+
+                        Personal Information
+
+                    </h2>
+
+                </div>
+
+                <form method="POST" novalidate>
+
+                    {{ form.hidden_tag() }}
+
+                    <div class="form-group">
+
+                        {{ form.full_name.label }}
+
+                        {{ form.full_name(
+                        class="form-control"
+                        ) }}
+
+                        {% for error in form.full_name.errors %}
+
+                        <small class="form-error">
+
+                            {{ error }}
+
+                        </small>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="form-group">
+
+                        {{ form.username.label }}
+
+                        {{ form.username(
+                        class="form-control"
+                        ) }}
+
+                        {% for error in form.username.errors %}
+
+                        <small class="form-error">
+
+                            {{ error }}
+
+                        </small>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="form-group">
+
+                        {{ form.email.label }}
+
+                        {{ form.email(
+                        class="form-control"
+                        ) }}
+
+                        {% for error in form.email.errors %}
+
+                        <small class="form-error">
+
+                            {{ error }}
+
+                        </small>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {{ form.submit(
+                    class="btn btn-primary"
+                    ) }}
+
+                </form>
+
+            </article>
+            <!-- ======================================
+                 Account Information
+            ======================================= -->
+
+            <article class="profile-card">
+
+                <div class="card-header">
+
+                    <h2>
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        Account Information
+
+                    </h2>
+
+                </div>
+
+                <div class="info-list">
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+
+                            User ID
+
+                        </span>
+
+                        <span class="info-value">
+
+                            #{{ current_user.id }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+
+                            Member Since
+
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ profile.created_at.strftime("%d %B %Y") }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+
+                            Email Verification
+
+                        </span>
+
+                        {% if profile.email_verified %}
+
+                        <span class="status-badge success">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            Verified
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="status-badge warning">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            Pending
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+
+                            Two-Factor Authentication
+
+                        </span>
+
+                        {% if profile.two_factor_enabled %}
+
+                        <span class="status-badge success">
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            Enabled
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="status-badge danger">
+
+                            <i class="fa-solid fa-shield"></i>
+
+                            Disabled
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block page_js %}
+
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+{% endblock %}
