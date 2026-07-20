@@ -54,6 +54,10 @@ from authentication.services.profile_service import (
     ProfileService,
 )
 
+from authentication.forms.resend_verification_form import (
+    ResendVerificationForm,
+)
+
 from authentication.extensions import db
 
 auth_bp = Blueprint(
@@ -392,7 +396,42 @@ def forgot_password():
         "pages/forgot_password.html",
         form=form,
     )
+    
+# ==========================================================
+# Resend Verification Email
+# ==========================================================
 
+@auth_bp.route(
+    "/resend-verification",
+    methods=["GET", "POST"],
+)
+def resend_verification():
+    """
+    Resend an email verification link.
+    """
+
+    form = ResendVerificationForm()
+
+    if form.validate_on_submit():
+
+        success, message = AuthService.resend_verification(
+            form.email.data,
+        )
+
+        flash(
+            message,
+            "info" if success else "danger",
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    return render_template(
+        "pages/resend_verification.html",
+        form=form,
+    )
+    
 # ==========================================================
 # Reset Password
 # ==========================================================
@@ -490,11 +529,20 @@ def verify_email(token):
             url_for("auth.login")
         )
 
-    if not user.is_email_verified:
+    if user.is_email_verified:
 
-        user.is_email_verified = True
+        flash(
+            "Your email address is already verified.",
+            "info",
+        )
 
-        db.session.commit()
+        return redirect(
+            url_for("auth.login")
+        )
+
+    user.is_email_verified = True
+
+    db.session.commit()
 
     flash(
         "Your email has been verified successfully.",

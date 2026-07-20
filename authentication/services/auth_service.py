@@ -98,11 +98,74 @@ class AuthService:
         db.session.add(user)
         db.session.commit()
 
-        return (
-            True,
-            "Account created successfully.",
+        AuthService.request_email_verification(
+            user,
         )
 
+        return (
+            True,
+            (
+
+            "Account created successfully. "
+            "Please check your email to verify your account."
+            ),
+        )
+        # ==========================================================
+    # Email Verification
+    # ==========================================================
+
+    @staticmethod
+    def request_email_verification(user):
+        """
+        Send an email verification link.
+        """
+
+        token = TokenService.generate_email_token(
+            user.email,
+        )
+
+        verification_url = url_for(
+            "auth.verify_email",
+            token=token,
+            _external=True,
+        )
+
+        EmailService.send_verification_email(
+            user,
+            verification_url,
+        )
+
+    @staticmethod
+    def resend_verification(email):
+        """
+        Resend an email verification link.
+
+        Always returns success to prevent
+        email enumeration.
+        """
+
+        user = User.query.filter_by(
+            email=email.lower().strip(),
+        ).first()
+
+        if user and not user.is_email_verified:
+
+            AuthService.request_email_verification(
+                user,
+            )
+
+        return (
+            True,
+            (
+                "If an account exists and is not yet "
+                "verified, a verification email has "
+                "been sent."
+            ),
+        )
+
+    # ==========================================================
+    # Login User
+    # ==========================================================
     # ==========================================================
     # Login User
     # ==========================================================
@@ -205,6 +268,22 @@ class AuthService:
                 f"Invalid email/username or password. {remaining_attempts} attempt(s) remaining.",
                 None,
             )
+
+        # ------------------------------------------------------
+        # Email Verification Check
+        # ------------------------------------------------------
+
+        if not user.is_email_verified:
+
+            return (
+                False,
+            (
+                "Please verify your email address before "
+                "logging in. Check your inbox for the "
+                "verification email."
+            ),
+            None,
+        )
 
         # ------------------------------------------------------
         # Successful Login

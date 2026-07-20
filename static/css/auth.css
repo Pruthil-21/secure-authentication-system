@@ -664,3 +664,61 @@ input:-webkit-autofill:active {
     color: #DC2626;
 
 }
+
+.btn-block {
+
+    display: block;
+
+    width: 100%;
+
+    max-width: 320px;
+
+    margin: 0 auto;
+
+}
+
+.auth-footer {
+
+    margin-top: 28px;
+
+    text-align: center;
+
+}
+
+/* ==========================================================
+   Authentication Links
+========================================================== */
+
+.auth-links {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+}
+
+.auth-link {
+
+    text-decoration: none;
+
+    font-size: 0.95rem;
+
+    font-weight: 500;
+
+    color: var(--primary-color);
+
+    transition: color 0.2s ease;
+
+}
+
+.auth-link:hover {
+
+    color: var(--primary-hover);
+
+    text-decoration: underline;
+
+}
