@@ -56,6 +56,11 @@ class User(UserMixin, db.Model):
         default=False,
         nullable=False,
     )
+    
+    two_factor_secret = db.Column(
+        db.String(32),
+        nullable=True,
+    )
 
     # ==========================================================
     # Security Fields

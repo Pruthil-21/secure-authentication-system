@@ -1,0 +1,149 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}
+  Security Center
+{% endblock %}
+
+{% block page_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+  <section class="dashboard-section">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h1>Security Center</h1>
+
+        <p>Manage your account security settings.</p>
+      </div>
+
+      <div class="security-grid">
+        <!-- Password -->
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="fa-solid fa-key"></i>
+
+              Password
+            </h2>
+          </div>
+
+          <p>
+            <strong>Last Changed:</strong>
+
+            {% if user.last_password_change %}
+              {{ user.last_password_change.strftime('%d %b %Y %I:%M %p') }}
+            {% else %}
+              Never
+            {% endif %}
+          </p>
+
+          <a href="{{ url_for('auth.change_password') }}" class="btn btn-primary">Change Password</a>
+        </div>
+
+        <!-- Two-Factor Authentication -->
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="fa-solid fa-shield-halved"></i>
+
+              Two-Factor Authentication
+            </h2>
+          </div>
+
+          <p>
+            <strong>Status:</strong>
+
+            {% if user.two_factor_enabled %}
+              <span class="status-badge success">Enabled</span>
+            {% else %}
+              <span class="status-badge failed">Disabled</span>
+            {% endif %}
+          </p>
+
+          <p>Protect your account using an authenticator application.</p>
+
+          {% if user.two_factor_enabled %}
+            <a href="{{ url_for('auth.disable_two_factor') }}" class="btn btn-danger">Disable Two-Factor Authentication</a>
+          {% else %}
+            <a href="{{ url_for('auth.enable_two_factor') }}" class="btn btn-primary">Enable Two-Factor Authentication</a>
+          {% endif %}
+        </div>
+
+        <!-- Login History -->
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="fa-solid fa-clock-rotate-left"></i>
+
+              Login History
+            </h2>
+          </div>
+
+          <p>Review your recent login activity.</p>
+
+          <a href="{{ url_for('auth.login_history') }}" class="btn btn-primary">View Login History</a>
+        </div>
+
+        <!-- Account Security -->
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>
+              <i class="fa-solid fa-user-lock"></i>
+
+              Account Security
+            </h2>
+          </div>
+
+          <div class="security-details">
+            <div class="security-item">
+              <strong>Last Login</strong>
+
+              <span>
+                {% if user.last_login %}
+                  {{ user.last_login.strftime('%d %b %Y %I:%M %p') }}
+                {% else %}
+                  Never
+                {% endif %}
+              </span>
+            </div>
+
+            <div class="security-item">
+              <strong>Last Login IP</strong>
+
+              <span>{{ user.last_login_ip or 'Unknown' }}</span>
+            </div>
+
+            <div class="security-item">
+              <strong>Login Count</strong>
+
+              <span>{{ user.login_count }}</span>
+            </div>
+
+            <div class="security-item">
+              <strong>Failed Attempts</strong>
+
+              <span>{{ user.failed_login_attempts }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-actions">
+        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-secondary">
+          <i class="fa-solid fa-arrow-left"></i>
+
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block page_js %}
+
+{% endblock %}

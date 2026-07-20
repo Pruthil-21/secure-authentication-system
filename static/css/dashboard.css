@@ -597,6 +597,12 @@ body.dark-theme {
 
     padding: 1.75rem;
 
+    display: flex;
+
+    flex-direction: column;
+
+    height: 100%;
+
     transition:
         transform .25s ease,
         border-color .25s ease,
@@ -1699,5 +1705,127 @@ button {
     display: flex;
 
     justify-content: flex-end;
+
+}
+
+/* ==========================================================
+   Security Center
+========================================================== */
+
+.security-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+    gap: 24px;
+
+    margin-top: 24px;
+
+}
+
+.security-details {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-top: 18px;
+
+}
+
+.security-details p {
+
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    line-height: 1.6;
+
+}
+
+.security-details strong {
+
+    color: var(--text-primary);
+
+}
+
+.dashboard-card .btn {
+
+    margin-top: auto;
+
+}
+
+.dashboard-card p {
+
+    margin-top: 12px;
+
+    margin-bottom: 0;
+
+}
+
+@media (max-width: 768px) {
+
+    .security-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+.dashboard-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 32px;
+
+}
+
+.security-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid var(--border-color);
+
+}
+
+.security-item:last-child {
+
+    border-bottom: none;
+
+}
+
+.btn-danger {
+
+    background: #dc3545;
+
+    color: #fff;
+
+    border: 1px solid #dc3545;
+
+}
+
+.btn-danger:hover {
+
+    background: #bb2d3b;
+
+    border-color: #bb2d3b;
+
+}
+
+.btn-danger:focus {
+
+    box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
 
 }

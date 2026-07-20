@@ -166,9 +166,6 @@ class AuthService:
     # ==========================================================
     # Login User
     # ==========================================================
-    # ==========================================================
-    # Login User
-    # ==========================================================
 
     @staticmethod
     def login_user(
@@ -307,6 +304,14 @@ class AuthService:
 
         db.session.commit()
 
+        if user.two_factor_enabled:
+
+            return (
+                True,
+                "Two-Factor Authentication required.",
+                user,
+            )
+
         return (
             True,
             "Login successful.",
@@ -416,4 +421,71 @@ class AuthService:
         return (
             True,
             "Your password has been reset successfully.",
+        )
+
+    # ==========================================================
+    # Change Password
+    # ==========================================================
+
+    @staticmethod
+    def change_password(
+        user,
+        form,
+    ):
+        """
+        Change the user's password.
+        """
+
+        if not bcrypt.check_password_hash(
+
+            user.password_hash,
+
+            form.current_password.data,
+
+        ):
+
+            return (
+                False,
+                "Current password is incorrect.",
+            )
+
+        if bcrypt.check_password_hash(
+
+            user.password_hash,
+
+            form.new_password.data,
+
+        ):
+
+            return (
+                False,
+                "New password must be different from your current password.",
+            )
+
+        password_result = validate_password(
+
+            form.new_password.data,
+
+        )
+
+        if not password_result.valid:
+
+            return (
+                False,
+                password_result.errors[0],
+            )
+
+        user.password_hash = bcrypt.generate_password_hash(
+
+            form.new_password.data,
+
+        ).decode("utf-8")
+
+        user.last_password_change = datetime.utcnow()
+
+        db.session.commit()
+
+        return (
+            True,
+            "Your password has been changed successfully.",
         )

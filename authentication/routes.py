@@ -8,6 +8,7 @@ from flask import (
     jsonify,
     redirect,
     render_template,
+    session,
     request,
     url_for,
 )
@@ -58,7 +59,35 @@ from authentication.forms.resend_verification_form import (
     ResendVerificationForm,
 )
 
-from authentication.extensions import db
+from authentication.services.two_factor_service import (
+    TwoFactorService,
+)
+
+from authentication.forms.enable_two_factor_form import (
+    EnableTwoFactorForm,
+)
+
+from authentication.forms.disable_two_factor_form import (
+    DisableTwoFactorForm,
+)
+
+from authentication.forms.verify_two_factor_form import (
+    VerifyTwoFactorForm,
+)
+
+from authentication.forms.change_password_form import (
+    ChangePasswordForm,
+)
+
+from authentication.extensions import (
+    bcrypt,
+    db,
+)
+
+import io
+import base64
+
+import qrcode
 
 auth_bp = Blueprint(
     "auth",
@@ -198,6 +227,16 @@ def login():
 
         if success:
 
+            if user.two_factor_enabled:
+
+                session["pending_2fa_user_id"] = user.id
+
+                session["remember_me"] = form.remember.data
+
+                return redirect(
+                    url_for("auth.verify_two_factor")
+                )
+
             login_user(
                 user,
                 remember=form.remember.data,
@@ -221,6 +260,112 @@ def login():
         "pages/login.html",
         form=form,
     )
+    
+# ==========================================================
+# Verify Two-Factor Authentication
+# ==========================================================
+
+@auth_bp.route(
+    "/verify-2fa",
+    methods=["GET", "POST"],
+)
+def verify_two_factor():
+    """
+    Verify the 2FA code before logging in.
+    """
+
+    user_id = session.get(
+        "pending_2fa_user_id",
+    )
+
+    if not user_id:
+
+        flash(
+            "Your login session has expired. Please sign in again.",
+            "warning",
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    user = User.query.get(
+        user_id,
+    )
+
+    if user is None:
+
+        session.pop(
+            "pending_2fa_user_id",
+            None,
+        )
+
+        session.pop(
+            "remember_me",
+            None,
+        )
+
+        flash(
+            "Invalid login session.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    form = VerifyTwoFactorForm()
+
+    if form.validate_on_submit():
+
+        if TwoFactorService.verify_code(
+
+            user.two_factor_secret,
+
+            form.otp_code.data,
+
+        ):
+
+            login_user(
+
+                user,
+
+                remember=session.get(
+                    "remember_me",
+                    False,
+                ),
+
+            )
+
+            session.pop(
+                "pending_2fa_user_id",
+                None,
+            )
+
+            session.pop(
+                "remember_me",
+                None,
+            )
+
+            flash(
+                "Welcome back!",
+                "success",
+            )
+
+            return redirect(
+                url_for("auth.dashboard")
+            )
+
+        flash(
+            "Invalid authentication code.",
+            "danger",
+        )
+
+    return render_template(
+        "pages/verify_2fa.html",
+        form=form,
+    )
+    
 # ==========================================================
 # Profile
 # ==========================================================
@@ -359,7 +504,7 @@ def logout():
 # ==========================================================
 # Forgot Password
 # ==========================================================
-'''
+
 @auth_bp.route(
     "/forgot-password",
     methods=["GET", "POST"],
@@ -376,38 +521,6 @@ def forgot_password():
         success, message = AuthService.forgot_password(
             form.email.data,
         )
-
-        flash(
-            message,
-            "info" if success else "danger",
-        )
-
-        return redirect(
-            url_for("auth.login")
-        )
-
-    return render_template(
-        "pages/forgot_password.html",
-        form=form,
-    )
-'''
-@auth_bp.route(
-    "/forgot-password",
-    methods=["GET", "POST"],
-)
-def forgot_password():
-
-    form = ForgotPasswordForm()
-
-    if form.validate_on_submit():
-
-        print("Before AuthService")
-
-        success, message = AuthService.forgot_password(
-            form.email.data,
-        )
-
-        print("After AuthService")
 
         flash(
             message,
@@ -501,6 +614,44 @@ def reset_password(token):
         form=form,
     )
 
+# ==========================================================
+# Change Password
+# ==========================================================
+
+@auth_bp.route(
+    "/change-password",
+    methods=["GET", "POST"],
+)
+@login_required
+def change_password():
+    """
+    Change the user's password.
+    """
+
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+
+        success, message = AuthService.change_password(
+            current_user,
+            form,
+        )
+
+        flash(
+            message,
+            "success" if success else "danger",
+        )
+
+        if success:
+
+            return redirect(
+                url_for("auth.security_center")
+            )
+
+    return render_template(
+        "pages/change_password.html",
+        form=form,
+    )
 
 # ==========================================================
 # Security Center
@@ -509,12 +660,159 @@ def reset_password(token):
 @auth_bp.route("/security-center")
 @login_required
 def security_center():
+    """
+    Display the user's security settings.
+    """
 
     return render_template(
         "pages/security_center.html",
+        user=current_user,
     )
 
+# ==========================================================
+# Enable Two-Factor Authentication
+# ==========================================================
 
+@auth_bp.route(
+    "/enable-2fa",
+    methods=["GET", "POST"],
+)
+@login_required
+def enable_two_factor():
+    """
+    Generate and enable Two-Factor Authentication.
+    """
+
+    if current_user.two_factor_enabled:
+
+        flash(
+            "Two-Factor Authentication is already enabled.",
+            "info",
+        )
+
+        return redirect(
+            url_for("auth.security_center")
+        )
+
+    form = EnableTwoFactorForm()
+
+    if not current_user.two_factor_secret:
+
+        current_user.two_factor_secret = (
+            TwoFactorService.generate_secret()
+        )
+
+        db.session.commit()
+
+    if form.validate_on_submit():
+
+        if TwoFactorService.verify_code(
+
+            current_user.two_factor_secret,
+
+            form.otp_code.data,
+
+        ):
+
+            current_user.two_factor_enabled = True
+
+            db.session.commit()
+
+            flash(
+                "Two-Factor Authentication has been enabled successfully.",
+                "success",
+            )
+
+            return redirect(
+                url_for("auth.security_center")
+            )
+
+        flash(
+            "Invalid verification code. Please try again.",
+            "danger",
+        )
+
+    provisioning_uri = (
+        TwoFactorService.generate_uri(
+            current_user,
+        )
+    )
+
+    qr = qrcode.make(
+        provisioning_uri,
+    )
+
+    buffer = io.BytesIO()
+
+    qr.save(
+        buffer,
+        format="PNG",
+    )
+
+    qr_code = base64.b64encode(
+        buffer.getvalue(),
+    ).decode()
+
+    return render_template(
+        "pages/enable_2fa.html",
+        form=form,
+        qr_code=qr_code,
+        secret=current_user.two_factor_secret,
+    )
+    
+# ==========================================================
+# Disable Two-Factor Authentication
+# ==========================================================
+
+@auth_bp.route(
+    "/disable-2fa",
+    methods=["GET", "POST"],
+)
+@login_required
+def disable_two_factor():
+    """
+    Disable Two-Factor Authentication.
+    """
+
+    if not current_user.two_factor_enabled:
+
+        flash(
+            "Two-Factor Authentication is not enabled.",
+            "info",
+        )
+
+        return redirect(
+            url_for("auth.security_center")
+        )
+
+    form = DisableTwoFactorForm()
+
+    if form.validate_on_submit():
+
+        success, message = (
+            TwoFactorService.disable_two_factor(
+                current_user,
+                form.password.data,
+                form.otp_code.data,
+            )
+        )
+
+        flash(
+            message,
+            "success" if success else "danger",
+        )
+
+        if success:
+
+            return redirect(
+                url_for("auth.security_center")
+            )
+
+    return render_template(
+        "pages/disable_2fa.html",
+        form=form,
+    )
+    
 # ==========================================================
 # Verify Email
 # ==========================================================
