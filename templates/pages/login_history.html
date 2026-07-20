@@ -1,17 +1,93 @@
-{% extends "layout/base.html" %}
+{% extends 'layout/base.html' %}
 
 {% block title %}
-Login History
+  Login History
+{% endblock %}
+
+{% block page_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
 {% endblock %}
 
 {% block content %}
+  <section class="dashboard-section">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h1>Login History</h1>
 
-<div class="container">
+        <p>Review your recent login activity.</p>
+      </div>
 
-    <h1>Login History</h1>
+      <div class="dashboard-card">
+        {% if history %}
+          <div class="table-responsive">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
 
-    <p>Coming soon...</p>
+                  <th>Status</th>
 
-</div>
+                  <th>Browser</th>
+
+                  <th>Operating System</th>
+
+                  <th>IP Address</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for login in history %}
+                  <tr>
+                    <td>{{ login.login_time.strftime('%d %b %Y %I:%M %p') }}</td>
+
+                    <td>
+                      {% if login.successful %}
+                        <span class="status-badge success">
+                          <i class="fa-solid fa-circle-check"></i>
+
+                          Success
+                        </span>
+                      {% else %}
+                        <span class="status-badge failed">
+                          <i class="fa-solid fa-circle-xmark"></i>
+
+                          Failed
+                        </span>
+                      {% endif %}
+                    </td>
+
+                    <td>{{ login.browser or 'Unknown' }}</td>
+
+                    <td>{{ login.operating_system or 'Unknown' }}</td>
+
+                    <td>{{ login.ip_address }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            <h3>No Login History</h3>
+
+            <p>Your login activity will appear here after you sign in.</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="dashboard-actions">
+        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-secondary">
+          <i class="fa-solid fa-arrow-left"></i>
+
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block page_js %}
 
 {% endblock %}

@@ -305,6 +305,32 @@ def dashboard():
         "pages/dashboard.html",
         **dashboard_data,
     )
+    
+# ==========================================================
+# Login History
+# ==========================================================
+
+@auth_bp.route("/login-history")
+@login_required
+def login_history():
+    """
+    Display the user's login history.
+    """
+
+    history = (
+        LoginHistory.query.filter_by(
+            user_id=current_user.id,
+        )
+        .order_by(
+            LoginHistory.login_time.desc()
+        )
+        .all()
+    )
+
+    return render_template(
+        "pages/login_history.html",
+        history=history,
+    )
 
 
 # ==========================================================
@@ -565,14 +591,3 @@ def verify_login_otp():
         "pages/verify_login_otp.html",
     )
     
-# ==========================================================
-# Login History
-# ==========================================================
-
-@auth_bp.route("/login-history")
-@login_required
-def login_history():
-
-    return render_template(
-        "pages/login_history.html",
-    )

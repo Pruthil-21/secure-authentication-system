@@ -11,9 +11,9 @@
 {% block content %}
   <section class="dashboard">
     <div class="dashboard-container">
-      <!--   ======================================================
+      <!--    ======================================================
              Hero Section
-        =======================================================   -->
+        =======================================================    -->
 
       <section class="hero-card">
         <div class="hero-content">
@@ -60,9 +60,9 @@
         </div>
       </section>
 
-      <!--   ======================================================
+      <!--    ======================================================
              Statistics
-        =======================================================   -->
+        =======================================================    -->
 
       <section class="stats-grid">
         <article class="stat-card">
@@ -124,14 +124,14 @@
         </article>
       </section>
 
-      <!--   ======================================================
+      <!--    ======================================================
              Main Dashboard Grid
-        =======================================================   -->
+        =======================================================    -->
 
       <section class="dashboard-grid">
-        <!--   ======================================================
+        <!--    ======================================================
              Account Security
-        =======================================================   -->
+        =======================================================    -->
 
         <article class="dashboard-card">
           <div class="card-header">
@@ -221,9 +221,9 @@
           </div>
         </article>
 
-        <!--   ======================================================
+        <!--    ======================================================
              Recent Login Activity
-        =======================================================   -->
+        =======================================================    -->
 
         <article class="dashboard-card">
           <div class="card-header">
@@ -279,9 +279,9 @@
         </article>
       </section>
 
-      <!--   ======================================================
-             Quick Actions
-        =======================================================   -->
+      <!--  ======================================================
+     Quick Actions
+=======================================================  -->
 
       <section class="quick-actions">
         <div class="card-header">
@@ -293,17 +293,23 @@
         </div>
 
         <div class="action-grid">
+          <!-- Security Center -->
+
           <a href="{{ url_for('auth.security_center') }}" class="action-card">
             <i class="fa-solid fa-shield-halved"></i>
 
             <span>Security Center</span>
           </a>
 
-          <a href="#" class="action-card">
+          <!-- Login History -->
+
+          <a href="{{ url_for('auth.login_history') }}" class="action-card">
             <i class="fa-solid fa-clock-rotate-left"></i>
 
             <span>Login History</span>
           </a>
+
+          <!-- Logout -->
 
           <a href="{{ url_for('auth.logout') }}" class="action-card logout">
             <i class="fa-solid fa-right-from-bracket"></i>
